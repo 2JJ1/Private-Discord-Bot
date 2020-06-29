@@ -8,7 +8,7 @@ This was designed for use with in only one guild.
 
 ```
 npm install
-``
+```
 
 ## Environment variables
 
