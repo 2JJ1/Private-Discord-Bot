@@ -1,0 +1,68 @@
+{
+  "_args": [
+    [
+      "discord-set@0.0.3",
+      "C:\\Users\\jonat\\Documents\\GitHub\\RoundBot\\bot"
+    ]
+  ],
+  "_from": "discord-set@0.0.3",
+  "_id": "discord-set@0.0.3",
+  "_inBundle": false,
+  "_integrity": "sha512-iO9k2LarYPkWscwzse3Chb+XTn1BDWId+RSAvPUhn0H8hqf6rrS3XE+d6dc1hgWSMQzwqJUzpLItfP7SIuYjQQ==",
+  "_location": "/discord-set",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "discord-set@0.0.3",
+    "name": "discord-set",
+    "escapedName": "discord-set",
+    "rawSpec": "0.0.3",
+    "saveSpec": null,
+    "fetchSpec": "0.0.3"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/discord-set/-/discord-set-0.0.3.tgz",
+  "_spec": "0.0.3",
+  "_where": "C:\\Users\\jonat\\Documents\\GitHub\\RoundBot\\bot",
+  "author": {
+    "name": "INEX07"
+  },
+  "bugs": {
+    "url": "https://github.com/INEX07/discord-set/issues"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  },
+  "description": "A powerful module with so many features like memes, automemes, chatbot & more.",
+  "homepage": "https://github.com/INEX07/discord-set#readme",
+  "keywords": [
+    "discord-set",
+    "discord.set",
+    "discord.js",
+    "eris",
+    "discord-chatbot",
+    "discord-meme",
+    "discord-automemes",
+    "automemes",
+    "discord",
+    "jokes",
+    "cathyjs",
+    "chatbot",
+    "cleverbot-free",
+    "shuffle",
+    "discord-emojify",
+    "emojify",
+    "discord-emoji"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "discord-set",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INEX07/discord-set.git"
+  },
+  "version": "0.0.3"
+}

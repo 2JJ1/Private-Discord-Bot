@@ -1,0 +1,37 @@
+{
+  "name": "private-discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot designed for use in a single server. No database software required! Just download the project, setup the .env and settings file, then run index.js. This was designed for use with in only one guild.",
+  "main": "index.js",
+  "dependencies": {
+    "anti-ip-logger": "^1.0.1",
+    "common-tags": "^1.8.0",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "latinize": "^0.4.1",
+    "minimist": "^1.2.5",
+    "moment": "^2.27.0",
+    "safe-regex": "^2.1.1",
+    "string-argv": "^0.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2JJ1/Private-Discord-Bot.git"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "private",
+    "easy"
+  ],
+  "author": "Jonathon Powell",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/2JJ1/Private-Discord-Bot/issues"
+  },
+  "homepage": "https://github.com/2JJ1/Private-Discord-Bot#readme"
+}

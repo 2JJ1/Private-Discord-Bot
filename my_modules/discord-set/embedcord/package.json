@@ -1,0 +1,63 @@
+{
+  "_args": [
+    [
+      "embedcord@2.0.0",
+      "C:\\Users\\jonat\\Documents\\GitHub\\RoundBot\\bot"
+    ]
+  ],
+  "_from": "embedcord@2.0.0",
+  "_id": "embedcord@2.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-DfXFmmD7Bv6CXsW0jxtpLWqAGgorbnZJR+EKyn/tui+QNXWVPo9XcPIm2IkLYTsRcujbVyqlKXZeeVREls682g==",
+  "_location": "/embedcord",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "embedcord@2.0.0",
+    "name": "embedcord",
+    "escapedName": "embedcord",
+    "rawSpec": "2.0.0",
+    "saveSpec": null,
+    "fetchSpec": "2.0.0"
+  },
+  "_requiredBy": [
+    "/discord-set"
+  ],
+  "_resolved": "https://registry.npmjs.org/embedcord/-/embedcord-2.0.0.tgz",
+  "_spec": "2.0.0",
+  "_where": "C:\\Users\\jonat\\Documents\\GitHub\\RoundBot\\bot",
+  "author": {
+    "name": "INEX07"
+  },
+  "bugs": {
+    "url": "https://github.com/INEX07/embedcord/issues"
+  },
+  "description": "Embed builder package for discord.",
+  "homepage": "https://github.com/INEX07/embedcord#readme",
+  "keywords": [
+    "discord",
+    "discord.js",
+    "eris",
+    "discord-tnt",
+    "embed",
+    "discord-embed",
+    "discord-embed-builder",
+    "richembed",
+    "messageembed",
+    "embedcord",
+    "eris-rich-embed",
+    "discord.hook"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "embedcord",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INEX07/embedcord.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "2.0.0"
+}
