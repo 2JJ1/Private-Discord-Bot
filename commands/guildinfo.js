@@ -7,7 +7,7 @@ module.exports = async function(msg){
     
     //Kicks/Bans from the past 24 hours
     if(settings.modCommands.rateLimitKicks){
-        var recentKicks = require("../../flatdbs/kicks.json").filter(timestamp => timestamp > Date.now() - 1000*60*60*24)
+        var recentKicks = require("../flatdbs/kicks.json").filter(timestamp => timestamp > Date.now() - 1000*60*60*24)
     }
 
     var totalMutes = (await msg.guild.members.fetch()).filter(member => member.roles.cache.filter(role => role.name.toLowerCase() === "muted").size > 0).size
