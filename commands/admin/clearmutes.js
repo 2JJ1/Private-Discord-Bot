@@ -1,3 +1,5 @@
+const fs = require("fs")
+const path = require("path")
 const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
@@ -8,9 +10,6 @@ module.exports = async function(msg){
 
     //The author must be an admin
     if(!(await permissions.IsAdmin(msg.member))) throw "You must be an admin to use this"
-
-    //Clear mutes in database
-    await Mutes.deleteMany({guildId: msg.guild.id})
 
     //Get the mute role's id
     var mutedRole = msg.guild.roles.cache.find(role => role.name.toLowerCase() === "muted")
@@ -33,4 +32,6 @@ module.exports = async function(msg){
         };
     } 
     else msg.channel.send(`Seems like no one is muted`);
+
+    fs.writeFileSync(path.resolve(__dirname, "../../flatdbs/mutes.json"), "{}")
 }

@@ -6,6 +6,7 @@ module.exports = async function(msg){
     var totalBans = (await msg.guild.fetchBans()).size
     
     //Kicks/Bans from the past 24 hours
+    var recentKicks
     if(settings.modCommands.rateLimitKicks){
         var recentKicks = require("../flatdbs/kicks.json").filter(timestamp => timestamp > Date.now() - 1000*60*60*24)
     }
@@ -29,7 +30,7 @@ module.exports = async function(msg){
                 > Region: ${msg.guild.region}
                 > Bans: ${totalBans}
                 > Mutes: ${totalMutes}` +
-                (settings.modCommands.rateLimitKicks ? `\n> Rate Limited kicks/bans: ${recentKicks}/25` : "")
+                (settings.modCommands.rateLimitKicks ? `\n> Rate Limited kicks/bans: ${recentKicks.length}/25` : "")
             },
         ],
     }})
