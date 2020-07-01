@@ -25,7 +25,7 @@ module.exports = async function(msg){
 	//Removes from the mutes database so they aren't remuted if they rejoin the guild
 	var mutes = require("../../flatdbs/mutes")
 	delete mutes[targetid]
-	fs.writeFileSync(path.resolve(__dirname, "../flatdbs/mutes.json"), JSON.stringify(mutes))
+	fs.writeFileSync(path.resolve(__dirname, "../../flatdbs/mutes.json"), JSON.stringify(mutes))
 
 	//Finds the mute role
 	var mutedRole = msg.guild.roles.cache.find(role => role.name.toLowerCase() === "muted")

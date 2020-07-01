@@ -21,7 +21,7 @@ client.on('ready', () => {
 	
 	//Check every 30 minutes
 	setInterval(async function(){
-		var mutes = require("../flatdbs/mutes")
+		var mutes = require("./flatdbs/mutes")
 		let guild = client.guilds.cache.get(process.env.GUILDID)
 		if(!guild) throw new Error("This bot is not in the guildID specified by .env.")
 
@@ -41,7 +41,7 @@ client.on('ready', () => {
 			}
 		}
 
-		fs.writeFileSync(path.resolve(__dirname, "../flatdbs/mutes.json"), JSON.stringify(mutes))
+		fs.writeFileSync(path.resolve(__dirname, "./flatdbs/mutes.json"), JSON.stringify(mutes))
 	}, 1000 * 60 * 30)
 });
 
