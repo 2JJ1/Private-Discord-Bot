@@ -23,7 +23,7 @@ module.exports = async function(msg){
     if(!isMod && isMiniMod && (await permissions.IsMiniModerator(target))) throw "Mini-moderators can't unmute mini-moderators"
 
 	//Removes from the mutes database so they aren't remuted if they rejoin the guild
-	var mutes = require("../../flatdbs/mutes")
+	var mutes = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../flatdbs/mutes.json"), {encoding: "utf8", flag: "a+"}) || "{}")
 	delete mutes[targetid]
 	fs.writeFileSync(path.resolve(__dirname, "../../flatdbs/mutes.json"), JSON.stringify(mutes))
 

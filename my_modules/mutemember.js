@@ -105,7 +105,7 @@ module.exports = async function(opts){
         (opts.by !== "bot") && msg && msg.channel.send(`<@${target.id}> is muted${hours?` for ${hours} hour${hours>1?"s":""}`:''}${days?` for ${days} day${days>1?"s":""}`:''}.`)
         
         //Log to database to prevent people from rejoining
-        var mutes = require("../flatdbs/mutes")
+        var mutes = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../flatdbs/mutes.json"), {encoding: "utf8", flag: "a+"}) || "{}")
         mutes[target.id] = {
             expires: expireDate
         }

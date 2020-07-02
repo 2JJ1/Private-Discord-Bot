@@ -46,7 +46,7 @@ module.exports = async function(msg){
     var bannedMember = (await msg.guild.fetchBans()).get(targetid)
 	if(bannedMember) throw "That user is already banned"
 	
-	var kicks = require("../../flatdbs/kicks.json")
+	var kicks = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../flatdbs/kicks.json"), {encoding: "utf8", flag: "a+"}) || "[]")
 
 	//Limit global kick count to 25 per 24 hours if rate-limiting is enabled
 	if(settings.modCommands.rateLimitKicks === true){

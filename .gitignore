@@ -1,5 +1,7 @@
 # etc
 settings.js
+flatdbs/mutes.json
+flatdbs/kicks.json
 
 
 # Logs

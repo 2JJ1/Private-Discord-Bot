@@ -19,7 +19,7 @@ module.exports = async function(msg){
 	//Cant kick moderators
 	if(await permissions.IsModerator(target)) throw "Moderators can't be kicked"
 
-	var kicks = require("../../flatdbs/kicks.json")
+	var kicks = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../flatdbs/kicks.json"), {encoding: "utf8", flag: "a+"}) || "[]")
 
 	//Limit global kick count to 25 per 24 hours if rate-limiting is enabled
 	if(settings.modCommands.rateLimitKicks === true){
