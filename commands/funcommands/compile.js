@@ -53,6 +53,33 @@ module.exports = async function(msg){
         case "php":
             compiler = "php-7.3.3"
             break
+        case "pony":
+            compiler = "pony-0.14.0"
+            break
+        case "clang":
+            compiler = "gcc-9.3.0-c"
+            break
+        case "java":
+            compiler = "openjdk-head"
+            break
+        case "ts":
+            compiler="typescript-3.9.5"
+            break
+        case "typescript":
+            comiler = "typescript-3.9.5"
+            break
+        case "sql":
+            compiler = "sqlite-3.19.3"
+            break
+        case "sh":
+            compiler ="bash"
+            break
+        case "bash":
+            compiler="bash"
+            break
+        case "cmake":
+            compiler="cmake-head"
+            break
     }
     if(!compiler) throw "We do not support that language!"
 
@@ -77,7 +104,7 @@ module.exports = async function(msg){
 
         //Limits the line count to 20
         let regexs = [...description.matchAll(/\r\n|\r|\n/g)]
-        if(regexs.length > 20){
+        if(regexs.length > 50){
             description = description.substr(0, regexs[20].index) + "\n..."
         }
 
