@@ -63,8 +63,7 @@ module.exports = async function(msg){
             compiler = "openjdk-head"
             break
         case "ts":
-            compiler="typescript-3.9.5"
-            break
+            language="typescript"
         case "typescript":
             comiler = "typescript-3.9.5"
             break
@@ -72,13 +71,9 @@ module.exports = async function(msg){
             compiler = "sqlite-3.19.3"
             break
         case "sh":
-            compiler ="bash"
-            break
+            language="bash"
         case "bash":
             compiler="bash"
-            break
-        case "cmake":
-            compiler="cmake-head"
             break
     }
     if(!compiler) throw "We do not support that language!"
@@ -104,7 +99,7 @@ module.exports = async function(msg){
 
         //Limits the line count to 20
         let regexs = [...description.matchAll(/\r\n|\r|\n/g)]
-        if(regexs.length > 50){
+        if(regexs.length > 20){
             description = description.substr(0, regexs[20].index) + "\n..."
         }
 
