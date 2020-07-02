@@ -53,6 +53,28 @@ module.exports = async function(msg){
         case "php":
             compiler = "php-7.3.3"
             break
+        case "pony":
+            compiler = "pony-0.14.0"
+            break
+        case "clang":
+            compiler = "gcc-9.3.0-c"
+            break
+        case "java":
+            compiler = "openjdk-head"
+            break
+        case "ts":
+            language="typescript"
+        case "typescript":
+            comiler = "typescript-3.9.5"
+            break
+        case "sql":
+            compiler = "sqlite-3.19.3"
+            break
+        case "sh":
+            language="bash"
+        case "bash":
+            compiler="bash"
+            break
     }
     if(!compiler) throw "We do not support that language!"
 
