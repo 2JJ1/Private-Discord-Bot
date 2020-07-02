@@ -7,9 +7,6 @@ module.exports = function(msg){
                     value: "!8ball <question>, !joke, !meme, !roast, !compile <coding_language> <code>, !whois <@mention>, !guildinfo, !listmods, !ping, !about"
                 }
             ],
-            footer: {
-                text: "https://roundbot.net/"
-            }
         }
     })
 }
