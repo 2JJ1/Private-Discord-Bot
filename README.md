@@ -27,3 +27,15 @@ guildID=
 Clone the file named "settings.default.js"
 Rename the clone to "settings.js"
 Edit settings.js to configure the bot. When you edit the settings, you will need to restart the bot
+
+
+## Running
+
+```
+node index.js
+```
+
+If using PM2 with --watch enabled, you will want to ignore the /flatdbs
+```
+pm2 start index.js --ignore-watch="flatdbs"
+```
