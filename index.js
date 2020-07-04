@@ -14,7 +14,7 @@ const AntiSpam = require('./my_modules/antispam')
 const isInvite = require('./my_modules/isinvite')
 require('./wrappers/permissions')
 
-client.on('ready', () => {
+client.on('ready', async () => {
 	console.log(`Logged in as ${client.user.tag} and serving ${client.guilds.cache.size} guild(s)`);
 
 	if(settings.status) client.user.setActivity(settings.status, {type: "PLAYING"})
