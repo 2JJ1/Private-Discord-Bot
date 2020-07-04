@@ -111,5 +111,5 @@ module.exports = async function(msg){
             }
         }})
     })
-    .catch((e) => {console.error(e); chat.edit("Failed.")})
+    .catch((e) => chat.edit("Failed."))
 }
