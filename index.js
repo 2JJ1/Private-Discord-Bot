@@ -61,7 +61,7 @@ client.on("guildMemberAdd", async (member) => {
 	}
 
 	//Check the database if this member is muted in this guild
-	if(settings.mutebypass){
+	if(settings.antiMuteBypass){
 		//Checks if there is a log mentioning they were muted
 		let isMuted = (JSON.parse(fs.readFileSync(path.resolve(__dirname, "./flatdbs/mutes.json"), {encoding: "utf8", flag: "a+"}) || "{}"))[member.user.id]
 		if(isMuted){

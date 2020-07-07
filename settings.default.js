@@ -16,6 +16,8 @@ module.exports = {
     //true - The bot will attempt to respond if a message starts with a bot mention
     //It sucks by the way... Might add an option to use a paid service
     chatbot: false,
+    //The bot will remute members on guild join if they left the guild while muted
+    antiMuteBypass: false,
     //The bot will check if a message contains messages that matches the checkers from settings.autoresponders
     autoResponder: false,
     //Hopefully you can figure out the pattern
