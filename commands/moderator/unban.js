@@ -32,6 +32,6 @@ module.exports = async function(msg){
     if(!bannedMember) throw "That user is not banned"
     
     //The actual unban part
-    await msg.guild.members.unban(targetid, `Unanned by <@${msg.author.id}>`)
+    await msg.guild.members.unban(targetid, `Unbanned by <@${msg.author.id}>`)
     msg.channel.send(`<@${targetid}> has been unbanned.`)
 }
