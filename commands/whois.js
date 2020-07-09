@@ -14,9 +14,10 @@ module.exports = async function(msg){
             break;
         }
     }
+    if(!targetid) throw "You must mention someone"
 
-    var mentionedUser = await client.users.fetch(targetid)
-    if(!mentionedUser) throw 'You must mention someone'
+    var mentionedUser = await client.users.fetch(targetid).catch(()=>{})
+    if(!mentionedUser) throw 'The mentioned user could not be found'
 
     var embed = {
         title: `${mentionedUser.username}'s Information`,
