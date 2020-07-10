@@ -32,7 +32,7 @@ module.exports = {
             "Hello world!",
             "You called?",
         ],
-        dmPreffered: [
+        dmPreferreds: [
             false,
             true
         ]
