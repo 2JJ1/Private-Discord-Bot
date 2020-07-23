@@ -27,7 +27,7 @@ client.on('ready', async () => {
 
 		for(userID in mutes){
 			if(mutes[userID].expires !== null && mutes[userID].expires < Date.now()){
-				let target = await guild.members.fetch(userID)
+				let target = await guild.members.fetch(userID).catch(()=>{})
 
 				//Don't attempt to remove the role if they're not in the server.
 				//The role would be gone anyways
