@@ -24,10 +24,9 @@ client.on('ready', async () => {
 		var mutes = JSON.parse(fs.readFileSync(path.resolve(__dirname, "./flatdbs/mutes.json"), {encoding: "utf8", flag: "a+"}) || "{}")
 		let guild = client.guilds.cache.get(process.env.GUILDID)
 		if(!guild) throw new Error("This bot is not in the guildID specified by .env.")
-		mutes = mutes.filter(mute => mute.expires !== null)
 
 		for(userID in mutes){
-			if(mutes[userID].expires < Date.now()){
+			if(mutes[userID].expires !== null && mutes[userID].expires < Date.now()){
 				let target = await guild.members.fetch(userID)
 
 				//Don't attempt to remove the role if they're not in the server.
