@@ -97,6 +97,7 @@ module.exports = {
         //true - Allows use of the "unwarn" command
         unwarn: false,
         //true - Allows use of the "slowmode" command
+        //"!slowmode 5" Each user can only send one message every 5 seconds
         slowMode: false,
         //The max seconds the slowmode command will set the SLOWMODE
         maxSlowMode: 10,
