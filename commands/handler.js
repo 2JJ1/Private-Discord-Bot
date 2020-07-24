@@ -23,6 +23,7 @@ const commands = {
     "warn": require('./moderator/warn'),
     "unwarn": require('./moderator/unwarn'),
     "purge": require('./moderator/purge'),
+    "slowmode": require('./moderator/slowmode'),
     //Fun commands
     "meme": require('./funcommands/meme'),
     "8ball": require('./funcommands/8ball'),

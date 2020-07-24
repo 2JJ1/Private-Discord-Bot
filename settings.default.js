@@ -96,6 +96,10 @@ module.exports = {
         warn: false,
         //true - Allows use of the "unwarn" command
         unwarn: false,
+        //true - Allows use of the "slowmode" command
+        slowMode: false,
+        //The max seconds the slowmode command will set the SLOWMODE
+        maxSlowMode: 10,
     },
 
     /* COMMANDS - ADMIN */
