@@ -126,7 +126,7 @@ client.on("guildMemberAdd", async (member) => {
 				},
 				{
 					name: "Invite uses",
-					value: `invite.uses`,
+					value: invite.uses,
 					inline: true
 				}
 			]
