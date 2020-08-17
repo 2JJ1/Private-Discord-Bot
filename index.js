@@ -17,10 +17,14 @@ require('./wrappers/permissions')
 // A pretty useful method to create a delay without blocking the whole script.
 const wait = require('util').promisify(setTimeout);
 
+// Initialize the invite cache
+const invites = {};
+
+
 client.on('ready', async () => {
 	// "ready" isn't really ready. We need to wait a spell.
 	wait(1000);
-	
+
 	console.log(`Logged in as ${client.user.tag} and serving ${client.guilds.cache.size} guild(s)`);
 
 	if(settings.status) client.user.setActivity(settings.status, {type: "PLAYING"})
@@ -49,6 +53,13 @@ client.on('ready', async () => {
 
 		fs.writeFileSync(path.resolve(__dirname, "./flatdbs/mutes.json"), JSON.stringify(mutes))
 	}, 1000 * 60 * 30)
+
+	// Load all invites for all guilds and save them to the cache.
+	client.guilds.cache.forEach(g => {
+		g.fetchInvites().then(guildInvites => {
+		  invites[g.id] = guildInvites;
+		});
+	});
 });
 
 //Called when someone joins the server
@@ -86,6 +97,22 @@ client.on("guildMemberAdd", async (member) => {
 
 	//Sends the welcome message if specified
 	if(settings.welcomeMessage) member.user.send(settings.welcomeMessage).catch(error => {})
+
+	//Track what invite they used by seeing which invite has incremented
+	member.guild.fetchInvites().then(guildInvites => {
+		// This is the *existing* invites for the guild.
+		const ei = invites[member.guild.id];
+		// Update the cached invites for the guild.
+		invites[member.guild.id] = guildInvites;
+		// Look through the invites, find the one for which the uses went up.
+		const invite = guildInvites.find(i => ei.get(i.code).uses < i.uses);
+		// This is just to simplify the message being sent below (inviter doesn't have a tag property)
+		const inviter = client.users.fetch(invite.inviter.id);
+		// Get the log channel (change to your liking)
+		const logChannel = member.guild.channels.cache.find(channel => channel.name.toLowerCase() === "logs");
+		// A real basic message with the information we need. 
+		logChannel.send(`<@${member.user.id}> joined using invite code ${invite.code} from ${inviter.tag}. Invite was used ${invite.uses} times since its creation.`);
+	  });
 });
 
 client.on('message', async msg => {
