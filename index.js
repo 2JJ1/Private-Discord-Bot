@@ -115,8 +115,8 @@ client.on("guildMemberAdd", async (member) => {
 			},
 			fields: [
 				{
-					name: "New Member",
-					value: `<@${member.user.id}> (${member.user.id})`,
+					name: "Member ID",
+					value: member.user.id,
 					inline: true
 				},
 				{
