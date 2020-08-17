@@ -14,7 +14,13 @@ const AntiSpam = require('./my_modules/antispam')
 const isInvite = require('./my_modules/isinvite')
 require('./wrappers/permissions')
 
+// A pretty useful method to create a delay without blocking the whole script.
+const wait = require('util').promisify(setTimeout);
+
 client.on('ready', async () => {
+	// "ready" isn't really ready. We need to wait a spell.
+	wait(1000);
+	
 	console.log(`Logged in as ${client.user.tag} and serving ${client.guilds.cache.size} guild(s)`);
 
 	if(settings.status) client.user.setActivity(settings.status, {type: "PLAYING"})
