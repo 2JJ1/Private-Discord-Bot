@@ -115,6 +115,11 @@ client.on("guildMemberAdd", async (member) => {
 			},
 			fields: [
 				{
+					name: "New Member",
+					value: `<@${member.user.tag}>(${member.user.id})`,
+					inline: true
+				},
+				{
 					name: "Invite Code",
 					value: invite.code,
 					inline: true
