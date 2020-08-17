@@ -12,6 +12,7 @@ const CleanRespond = require('./my_modules/cleanrespond')
 const AIChatResponse = require('./my_modules/aichatresponse')
 const AntiSpam = require('./my_modules/antispam')
 const isInvite = require('./my_modules/isinvite')
+const LogChannel = require("./my_modules/logchannel")
 require('./wrappers/permissions')
 
 // A pretty useful method to create a delay without blocking the whole script.
@@ -106,10 +107,30 @@ client.on("guildMemberAdd", async (member) => {
 		invites[member.guild.id] = guildInvites;
 		// Look through the invites, find the one for which the uses went up.
 		const invite = guildInvites.find(i => ei.get(i.code).uses < i.uses);
-		// Get the log channel (change to your liking)
-		const logChannel = member.guild.channels.cache.find(channel => channel.name.toLowerCase() === "logs");
-		// A real basic message with the information we need. 
-		logChannel.send(`<@${member.user.id}> joined using invite code ${invite.code} from <@${invite.inviter.id}>. Invite was used ${invite.uses} times since its creation.`);
+		//Logs the invite info
+		LogChannel(member.guild, {embed: {
+			author: {
+				name: `New Member: ${member.user.tag}`,
+				icon_url: member.user.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
+			},
+			fields: [
+				{
+					name: "Invite Code",
+					value: invite.code,
+					inline: true
+				},
+				{
+					name: "Invited By",
+					value: `<@${invite.inviter.id}>`,
+					inline: true
+				},
+				{
+					name: "Invite uses",
+					value: `invite.uses`,
+					inline: true
+				}
+			]
+		}})
 	});
 });
 
@@ -179,21 +200,8 @@ client.on("messageDelete", async msg => {
 	//Logs only if enabled
 	if(!settings.logMessages) return
 
-	//Find the logs channel
-	var logChannel = msg.guild.channels.cache.find(channel => channel.name.toLowerCase() === "logs")
-	//Create it if it doesn't exist
-	if(!logChannel){
-		logChannel = await msg.guild.channels.create("logs", {
-			type: "text",
-			nsfw: true,
-			reason: "The message log setting was enabled. RoundBot attempted to log something, but the channel did not exist."
-		})
-	}
-	//Exit if the bot could not find or create the logs channel(E.g lacks permission)
-	if(!logChannel) return
-
 	//Logs the deleted message
-	logChannel.send({embed: {
+	LogChannel(msg.guild, {embed: {
 		author: {
 			name: `Message From ${msg.author.tag} Deleted`,
 			icon_url: msg.author.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
@@ -224,21 +232,8 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
 	//Don't log if the edited message is the same (Idk how it happens, but it does)
 	if(oldMsg.content === newMsg.content) return
 
-	//Find the logs channel
-	var logChannel = oldMsg.guild.channels.cache.find(channel => channel.name.toLowerCase() === "logs")
-	//Create it if it doesn't exist
-	if(!logChannel){
-		logChannel = await oldMsg.guild.channels.create("logs", {
-			type: "text",
-			nsfw: true,
-			reason: "The message log setting was enabled. RoundBot attempted to log something, but the channel did not exist."
-		})
-	}
-	//Exit if the bot could not find or create the logs channel(E.g lacks permission)
-	if(!logChannel) return
-
 	//Logs the deleted message
-	logChannel.send({embed: {
+	LogChannel(newMsg.guild, {embed: {
 		author: {
 			name: `${oldMsg.author.tag} Edited A Message`,
 			icon_url: oldMsg.author.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
