@@ -50,6 +50,8 @@ module.exports = {
         maxCalls: 40*15, //How many calls per time frame
 		timeFrame: 15, //Time frame in seconds
     },
+    //Enables invite tracker. Logs to #logs who joined, from what invite, and who owns the invite. Useful to determine a raid host
+    trackInvites: false,
 
     /* COMMANDS - FUN */
 
