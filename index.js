@@ -208,7 +208,7 @@ client.on("messageDelete", async msg => {
 	//Logs the deleted message
 	LogChannel(msg.guild, {embed: {
 		author: {
-			name: `Message From ${msg.author.tag} (${msg.author.id}) Deleted`,
+			name: `${msg.author.tag} (${msg.author.id}) Deleted A Message`,
 			icon_url: msg.author.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
 		},
 		fields: [
