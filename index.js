@@ -240,7 +240,7 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
 	//Logs the deleted message
 	LogChannel(newMsg.guild, {embed: {
 		author: {
-			name: `${oldMsg.author.tag} (${msg.author.id}) Edited A Message`,
+			name: `${oldMsg.author.tag} (${oldMsg.author.id}) Edited A Message`,
 			icon_url: oldMsg.author.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
 		},
 		fields: [
