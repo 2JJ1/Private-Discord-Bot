@@ -55,7 +55,7 @@ module.exports = async function(msg){
 	}
 
 	//Apply the role
-	await target.roles.add(warnRoleId, `Warned by <@${targetid}> - (${reason})`)
+	await target.roles.add(warnRoleId, `Warned by <@${msg.author.id}> - (${reason})`)
 
 	//Send the warned user their warning
 	target.send(warningMessage)
