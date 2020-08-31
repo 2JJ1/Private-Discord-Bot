@@ -39,7 +39,7 @@ module.exports = async function(msg){
 
 	//Check if the role ID is whitelisted
 	//Used find instead of indexOf for support of string and numbered role id indexes
-	if(!settings.modCommands.addRoleWhitelist.find(e => e == role.id)) throw "That role is not whitelisted to be addable"
+	if(!settings.modCommands.addRoleWhitelist.find(e => e == role.id)) throw "That role is not whitelisted as addable"
 
 	//Apply the role
 	await target.roles.add(role, `Added by <@${msg.author.id}>`)

@@ -103,7 +103,7 @@ module.exports = {
         slowMode: false,
         //The max seconds the slowmode command will set the SLOWMODE
         maxSlowMode: 10,
-        //An array of role ids that can be used with the "addrole" command
+        //An array of role ids that can be used with the "addrole" and "removerole" commands
         //Populating the array enables the command
         addRoleWhitelist: []
     },
