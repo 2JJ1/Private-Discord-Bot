@@ -6,10 +6,10 @@ const throttler = require('./my_modules/throttler')
 const settings = require("./settings")
 const fs = require("fs")
 const path = require("path")
+const cleverbot = require("cleverbot-free")
 const commands = require('./commands/handler')
 const TextHasWords = require('./my_modules/texthaswords')
 const CleanRespond = require('./my_modules/cleanrespond')
-const AIChatResponse = require('./my_modules/aichatresponse')
 const AntiSpam = require('./my_modules/antispam')
 const isInvite = require('./my_modules/isinvite')
 const LogChannel = require("./my_modules/logchannel")
@@ -167,14 +167,15 @@ client.on('message', async msg => {
 
 		//Command parsing is initiated with ! at the beginning of the chat
 		if (msg.content.substring(0,1) === settings.prefix) await commands.HandleCommand(msg, settings)
-		//Trigger the chatbot if the message starts off with the bot being mentioned (If enabled) (Premium)
+		//Trigger the chatbot if the message starts off with the bot being mentioned (If enabled)
 		else if(settings.chatbot && msg.content.indexOf(`<@!${client.user.id}>`) === 0){
 			msg.channel.startTyping()
-			let response = await AIChatResponse(msg.content)
+			let withoutPrefix = msg.content.replace(`<@!${client.user.id}>`, "")
+			let response = await cleverbot(withoutPrefix)
 			msg.channel.stopTyping()
 			msg.reply(response)
 		}
-		//Check for defined key words and auto respond (If enabled) (Premium)
+		//Check for defined key words and auto respond (If enabled)
 		else if(settings.autoResponder){
 			var responders = settings.autoResponders
 			/*Even though its turned on, they might not have actually created 

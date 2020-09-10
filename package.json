@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "anti-ip-logger": "^1.0.1",
+    "cleverbot-free": "^1.0.4",
     "common-tags": "^1.8.0",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
@@ -35,6 +36,8 @@
   },
   "homepage": "https://github.com/2JJ1/Private-Discord-Bot#readme",
   "nodemonConfig": {
-    "ignore": ["flatdbs"]
+    "ignore": [
+      "flatdbs"
+    ]
   }
 }
