@@ -28,7 +28,6 @@ Clone the file named "settings.default.js"
 Rename the clone to "settings.js"
 Edit settings.js to configure the bot. When you edit the settings, you will need to restart the bot
 
-
 ## Running
 
 ```
@@ -39,3 +38,6 @@ If using PM2 with --watch enabled, you will want to ignore the /flatdbs
 ```
 pm2 start index.js --ignore-watch="flatdbs"
 ```
+
+## ETC
+When inviting the bot to your server, be sure that it is invited with the admin permission. Manually adding the admin permission later causes issues.
