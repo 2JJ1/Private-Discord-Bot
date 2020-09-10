@@ -22,7 +22,7 @@ class Permisisons{
             // The role doesn't exist, so create it
             //The admin role should be right under the bot's highest role
             let botMember = await guildMember.guild.members.fetch(client.user.id)
-            let position = botMember.roles.highest.position - 1
+            let position = botMember.roles.highest.position
             let newRole = await guildMember.guild.roles.create({
                 data: {
                     name: "admin",
@@ -63,11 +63,11 @@ class Permisisons{
             //A moderator should be right under an admin
             var position
             var adminRole = guildMember.guild.roles.cache.find(role => role.name.toLowerCase() === "admin")
-            if(adminRole) position = adminRole.position - 1
+            if(adminRole) position = adminRole.position
             //If the admin role doesn't exist yet, then add it under RoundBot
             else {
                 let botMember = await guildMember.guild.members.fetch(client.user.id)
-                position = botMember.roles.highest.position - 1
+                position = botMember.roles.highest.position
             }
 
             await guildMember.guild.roles.create({
@@ -104,11 +104,11 @@ class Permisisons{
             var position;
             let moderatorRole = guildMember.guild.roles.cache.find(role => role.name.toLowerCase() === "moderator")
             let adminRole = guildMember.guild.roles.cache.find(role => role.name.toLowerCase() === "admin")
-            if(moderatorRole) position = moderatorRole.position - 1
+            if(moderatorRole) position = moderatorRole.position
             //If the moderator role doesn't exist yet, add it under an admin
-            else if(adminRole) position = adminRole.position - 1
+            else if(adminRole) position = adminRole.position
             //If the admin role doesn't exist yet, add it directly under RoundBot
-            else position = (await guildMember.guild.members.fetch(client.user.id)).roles.highest.position - 1
+            else position = (await guildMember.guild.members.fetch(client.user.id)).roles.highest.position
 
             await guildMember.guild.roles.create({
                 data: {

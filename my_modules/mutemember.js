@@ -67,7 +67,7 @@ module.exports = async function(opts){
 		//Put the role under the moderator role. 
 		//The moderator role is guaranteed to exist after the target's mod check
 		var modRole = target.guild.roles.cache.find(role => role.name.toLowerCase() === "moderator")
-        position = modRole.position - 1
+        position = modRole.position
         
 		//Create the role
 		let newRole = await target.guild.roles.create({
