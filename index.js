@@ -183,7 +183,9 @@ client.on('message', async msg => {
 				for(var i=0; i<responders.checkers.length; i++){ //Goes through each checker
 					if(TextHasWords(msg.content, responders.checkers[i])){
 						var text = responders.responses[i]
-						responders.dmPreferreds[i] ? CleanRespond(msg, text) : msg.reply(text)
+
+						if(text === "[delete]") msg.delete({reason: "Instructed by the pattern matcher"})
+						else responders.dmPreferreds[i] ? CleanRespond(msg, text) : msg.reply(text)
 					}
 				}
 			}
