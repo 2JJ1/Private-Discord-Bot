@@ -169,7 +169,7 @@ client.on('message', async msg => {
 		//Command parsing is initiated with ! at the beginning of the chat
 		if (msg.content.substring(0,1) === settings.prefix) await commands.HandleCommand(msg, settings)
 		//Trigger the chatbot if the message starts off with the bot being mentioned (If enabled)
-		else if(settings.chatbot && msg.content.indexOf(`<@!${client.user.id}>`) === 0){
+		else if(settings.chatbot && msg.content.indexOf(`<@!${client.user.id}>`) === 0 || settings.chatbot && msg.content.indexOf(`<@${client.user.id}>`)){
 			//Only 8 calls can be called per 5 seconds
 			await throttler(`${msg.guild.id}-chatbot`, {
 				maxCalls: 8,
