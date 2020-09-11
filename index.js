@@ -13,6 +13,7 @@ const CleanRespond = require('./my_modules/cleanrespond')
 const AntiSpam = require('./my_modules/antispam')
 const isInvite = require('./my_modules/isinvite')
 const LogChannel = require("./my_modules/logchannel")
+const MuteMember = require("./my_modules/mutemember")
 require('./wrappers/permissions')
 
 // A pretty useful method to create a delay without blocking the whole script.
@@ -183,10 +184,14 @@ client.on('message', async msg => {
 			if(responders) {
 				for(var i=0; i<responders.checkers.length; i++){ //Goes through each checker
 					if(TextHasWords(msg.content, responders.checkers[i])){
-						var text = responders.responses[i]
+						let autoResponse = responders.responses[i]
 
-						if(text === "[delete]") msg.delete({reason: "Instructed by the pattern matcher"})
-						else responders.dmPreferreds[i] ? CleanRespond(msg, text) : msg.reply(text)
+						if(typeof autoResponse === "object"){
+							if(autoResponse.actions.indexOf("delete") !== -1) msg.delete({reason: "Instructed by the pattern matcher"})
+							if(autoResponse.actions.indexOf("mute") !== -1) MuteMember({msg, reason: "Instructed by the pattern matcher", by: "bot"})
+							if(autoResponse.response) responders.dmPreferreds[i] ? CleanRespond(msg, autoResponse.response) : msg.reply(autoResponse.response)
+						}
+						else responders.dmPreferreds[i] ? CleanRespond(msg, autoResponse) : msg.reply(autoResponse)
 					}
 				}
 			}
