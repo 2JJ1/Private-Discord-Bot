@@ -170,6 +170,14 @@ client.on('message', async msg => {
 		if (msg.content.substring(0,1) === settings.prefix) await commands.HandleCommand(msg, settings)
 		//Trigger the chatbot if the message starts off with the bot being mentioned (If enabled)
 		else if(settings.chatbot && msg.content.indexOf(`<@!${client.user.id}>`) === 0){
+			//Only 8 calls can be called per 5 seconds
+			await throttler(`${msg.guild.id}-chatbot`, {
+				maxCalls: 8,
+				timeFrame: 5,
+				burst: false
+			})
+			.catch(()=>{throw "AI Throttled"})
+	
 			msg.channel.startTyping()
 			let withoutPrefix = msg.content.replace(`<@!${client.user.id}>`, "")
 			let response = await cleverbot(withoutPrefix)
