@@ -179,7 +179,7 @@ client.on('message', async msg => {
 		//Check for defined key words and auto respond (If enabled)
 		else if(settings.autoResponder){
 			var responders = settings.autoResponders
-			/*Even though its turned on, they might not have actually created 
+			/*Even though it's turned on, they might not have actually created 
 			any checkers, so check */
 			if(responders) {
 				for(var i=0; i<responders.checkers.length; i++){ //Goes through each checker
