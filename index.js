@@ -192,14 +192,19 @@ client.on('message', async msg => {
 			if(responders) {
 				for(var i=0; i<responders.checkers.length; i++){ //Goes through each checker
 					if(TextHasWords(msg.content, responders.checkers[i])){
+						//Fetch response
 						let autoResponse = responders.responses[i]
 
+						//Send response
 						if(typeof autoResponse === "object"){
 							if(autoResponse.actions.indexOf("delete") !== -1) msg.delete({reason: "Instructed by the pattern matcher"})
 							if(autoResponse.actions.indexOf("mute") !== -1) MuteMember({msg, reason: "Instructed by the pattern matcher", by: "bot"})
 							if(autoResponse.response) responders.dmPreferreds[i] ? CleanRespond(msg, autoResponse.response) : msg.reply(autoResponse.response)
 						}
 						else responders.dmPreferreds[i] ? CleanRespond(msg, autoResponse) : msg.reply(autoResponse)
+
+						//Only use the first match
+						break
 					}
 				}
 			}
