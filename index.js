@@ -122,17 +122,17 @@ client.on("guildMemberAdd", async (member) => {
 				},
 				{
 					name: "Invite Code",
-					value: invite.code,
+					value: invite ? invite.code : "One-time",
 					inline: true
 				},
 				{
 					name: "Invited By",
-					value: `<@${invite.inviter.id}>`,
+					value: invite ? `<@${invite.inviter.id}>` : "One-time",
 					inline: true
 				},
 				{
 					name: "Invite uses",
-					value: invite.uses,
+					value: invite ? invite.uses : "One-time",
 					inline: true
 				}
 			]
