@@ -107,7 +107,13 @@ client.on("guildMemberAdd", async (member) => {
 		// Update the cached invites for the guild.
 		invites[member.guild.id] = guildInvites;
 		// Look through the invites, find the one for which the uses went up.
-		const invite = guildInvites.find(i => ei.get(i.code).uses < i.uses);
+		const invite = ei.find(i => {
+			//If the invite doesn't exist and maxUses is about to max, likely deleted by Discord due to maxUses.
+			//Assumes a moderator isn't deleting invites.
+			if(!guildInvites.get(i.code) && (i.uses+1 == i.maxUses)) return true
+			//If the invite exists, check if the use count increased
+			else return i.uses < guildInvites.get(i.code).uses
+		});
 		//Logs the invite info
 		LogChannel(member.guild, {embed: {
 			author: {
@@ -122,17 +128,17 @@ client.on("guildMemberAdd", async (member) => {
 				},
 				{
 					name: "Invite Code",
-					value: invite ? invite.code : "One-time",
+					value: invite ? invite.code : "?",
 					inline: true
 				},
 				{
 					name: "Invited By",
-					value: invite ? `<@${invite.inviter.id}>` : "One-time",
+					value: invite ? `<@${invite.inviter.id}>` : "?",
 					inline: true
 				},
 				{
 					name: "Invite uses",
-					value: invite ? invite.uses : "One-time",
+					value: invite ? `${invite.uses + 1}/${invite.maxUses}` : "?",
 					inline: true
 				}
 			]
