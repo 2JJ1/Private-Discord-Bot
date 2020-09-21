@@ -138,7 +138,7 @@ client.on("guildMemberAdd", async (member) => {
 				},
 				{
 					name: "Invite uses",
-					value: invite ? `${invite.uses + 1}/${invite.maxUses}` : "?",
+					value: invite ? `${invite.uses + 1}/${invite.maxUses || "inf"}` : "?",
 					inline: true
 				}
 			]
