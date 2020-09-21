@@ -241,7 +241,7 @@ client.on("messageDelete", async msg => {
 		fields: [
 			{
 				name: "Message",
-				value: msg.content.substr(0,500) + (msg.content.length > 500 ? "..." : "")
+				value: (msg.content.substr(0,500) + (msg.content.length > 500 ? "..." : "")) || "<EMPTY_CONTENT>"
 			},
 			{
 				name: "Channel",
@@ -273,11 +273,11 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
 		fields: [
 			{
 				name: "Old Message",
-				value: oldMsg.content.substr(0,500) + (oldMsg.content.length > 500 ? "..." : "")
+				value: (oldMsg.content.substr(0,500) + (oldMsg.content.length > 500 ? "..." : "")) || "<EMPTY_CONTENT>"
 			},
 			{
 				name: "New Message",
-				value: newMsg.content.substr(0,500) + (newMsg.content.length > 500 ? "..." : ""),
+				value: (newMsg.content.substr(0,500) + (newMsg.content.length > 500 ? "..." : "")) || "<EMPTY_CONTENT>",
 				inline: true
 			},
 			{
