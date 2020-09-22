@@ -26,6 +26,7 @@ const commands = {
     "slowmode": require('./moderator/slowmode'),
     "addrole": require('./moderator/addrole'),
     "removerole": require('./moderator/removerole'),
+    "reboot": require("./moderator/reboot"),
     //Fun commands
     "meme": require('./funcommands/meme'),
     "8ball": require('./funcommands/8ball'),

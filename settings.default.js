@@ -105,7 +105,9 @@ module.exports = {
         maxSlowMode: 10,
         //An array of role ids that can be used with the "addrole" and "removerole" commands
         //Populating the array enables the command
-        addRoleWhitelist: []
+        addRoleWhitelist: [],
+        //true - Allows use of the "reboot" command
+        reboot: false,
     },
 
     /* COMMANDS - ADMIN */
