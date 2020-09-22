@@ -11,7 +11,7 @@ module.exports = async function(msg){
     if(isMod !== true)  throw 'You are not a moderator'
     
     //Won't be able to respond after killing, so confirm prior
-    msg.react("✅")
+    await msg.react("✅")
 
     //Kill the process assuming the a process manager will reboot it
 	process.exit(1);
