@@ -200,15 +200,17 @@ client.on('message', async msg => {
 					if(TextHasWords(msg.content, responders.checkers[i])){
 						//Fetch response
 						let autoResponse = responders.responses[i]
+						let autoResponseText = typeof autoResponse === "string" ? autoResponse : autoResponse.response
 
-						//Send response
+						//Handle actions
 						if(typeof autoResponse === "object"){
 							if(autoResponse.actions.indexOf("delete") !== -1) msg.delete({reason: "Instructed by the message pattern matcher"})
 							if(autoResponse.actions.indexOf("kick") !== -1) msg.member.kick({reason: "Instructed by the message pattern matcher"})
 							if(autoResponse.actions.indexOf("mute") !== -1) MuteMember({msg, hours: 1, reason: "Instructed by the message pattern matcher", by: "bot"}).catch(()=>{})
-							if(autoResponse.response) responders.dmPreferreds[i] ? CleanRespond(msg, autoResponse.response) : msg.reply(autoResponse.response)
 						}
-						else responders.dmPreferreds[i] ? CleanRespond(msg, autoResponse) : msg.reply(autoResponse)
+						
+						//Send response text
+						responders.dmPreferreds[i] ? CleanRespond(msg, autoResponseText) : msg.reply(autoResponseText).then((reply) => setTimeout(()=>reply.delete(), 15000))
 
 						//Only use the first match
 						break
