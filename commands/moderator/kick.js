@@ -21,10 +21,11 @@ module.exports = async function(msg){
 
 	var kicks = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../flatdbs/kicks.json"), {encoding: "utf8", flag: "a+"}) || "[]")
 
-	//Limit global kick count to 25 per 24 hours if rate-limiting is enabled
-	if(settings.modCommands.rateLimitKicks === true){
+	//Limit global kick count per 24 hours if rate-limiting is enabled
+	var rateLimitKicksPerDay = settings.modCommands.rateLimitKicksPerDay
+	if(rateLimitKicksPerDay > 0){
 		var recentKicks = kicks.filter(timestamp => timestamp > Date.now() - 1000*60*60*24)
-		if(recentKicks.length >= 25) throw "This guild has reached the limit of 25 kicks per 24 hours"
+		if(recentKicks.length >= rateLimitKicksPerDay) throw `This guild has reached the limit of ${rateLimitKicksPerDay} kicks/bans per 24 hours`
 	}
 
 	//Why they were kicked
@@ -43,7 +44,7 @@ module.exports = async function(msg){
 	if(target) await target.send(`You've been kicked from the guild named, "${msg.guild.name}". Reason: ${reason}`).catch(()=>{})
 
 	//Log it if rate-limiting is enabled
-	if(settings.modCommands.rateLimitKicks === true){				
+	if(rateLimitKicksPerDay > 0){				
 		kicks.push(Date.now())
 		fs.writeFileSync(path.resolve(__dirname, "../../flatdbs/kicks.json"), JSON.stringify(kicks))
 	}

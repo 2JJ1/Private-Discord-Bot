@@ -81,9 +81,10 @@ module.exports = {
         unmute: false,
         //true - Allows use of the "addminimod" command
         addMinimod: false,
-        //true - Limits bans/kicks to 25 per 24 hours
-        //Aka anti-nuke
-        rateLimitKicks: false,
+        //Choose any number to select how many kicks can be done per hour.
+        //If 0, the rate limit is disabled
+        //Useful to prevent mods from running a script to nuke your server(Kick everyone out)
+        rateLimitKicksPerDay: 0,
         //true - Allows use of the "ban" command
         ban: false,
         //true - Allows use of the "unban" command
