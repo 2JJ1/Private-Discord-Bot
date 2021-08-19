@@ -210,7 +210,7 @@ client.on('message', async msg => {
 						}
 						
 						//Send response text
-						responders.dmPreferreds[i] ? CleanRespond(msg, autoResponseText) : msg.reply(autoResponseText).then((reply) => setTimeout(()=>reply.delete(), 15000))
+						responders.dmPreferreds[i] ? CleanRespond(msg, autoResponseText) : msg.reply(autoResponseText)
 
 						//Only use the first match
 						break
