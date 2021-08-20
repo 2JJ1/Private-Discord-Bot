@@ -205,7 +205,7 @@ client.on('message', async msg => {
 						//Handle actions
 						if(typeof autoResponse === "object"){
 							if(autoResponse.actions.indexOf("delete") !== -1) msg.delete({reason: "Instructed by the message pattern matcher"})
-							if(autoResponse.actions.indexOf("kick") !== -1) msg.member.kick({reason: "Instructed by the message pattern matcher"})
+							if(autoResponse.actions.indexOf("kick") !== -1) msg.member.kick("Instructed by the message pattern matcher")
 							if(autoResponse.actions.indexOf("mute") !== -1) MuteMember({msg, hours: 1, reason: "Instructed by the message pattern matcher", by: "bot"}).catch(()=>{})
 						}
 						
