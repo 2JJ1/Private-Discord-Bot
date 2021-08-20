@@ -6,7 +6,6 @@ const throttler = require('./my_modules/throttler')
 const settings = require("./settings")
 const fs = require("fs")
 const path = require("path")
-const cleverbot = require("cleverbot-free")
 const commands = require('./commands/handler')
 const TextHasWords = require('./my_modules/texthaswords')
 const CleanRespond = require('./my_modules/cleanrespond')
@@ -174,22 +173,6 @@ client.on('message', async msg => {
 
 		//Command parsing is initiated with ! at the beginning of the chat
 		if (msg.content.substring(0,1) === settings.prefix) await commands.HandleCommand(msg, settings)
-		//Trigger the chatbot if the message starts off with the bot being mentioned (If enabled)
-		else if(settings.chatbot && new RegExp(`^<@[!]?${client.user.id}>`,"g").test(msg.content)){
-			//Only 8 calls can be called per 5 seconds
-			await throttler(`${msg.guild.id}-chatbot`, {
-				maxCalls: 8,
-				timeFrame: 5,
-				burst: false
-			})
-			.catch(()=>{throw "AI Throttled"})
-	
-			msg.channel.startTyping()
-			let withoutPrefix = msg.content.replace(`<@!${client.user.id}>`, "")
-			let response = await cleverbot(withoutPrefix)
-			msg.channel.stopTyping()
-			msg.reply(response)
-		}
 		//Check for defined key words and auto respond (If enabled)
 		else if(settings.autoResponder){
 			var responders = settings.autoResponders
