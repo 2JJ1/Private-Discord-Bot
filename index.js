@@ -111,7 +111,7 @@ client.on("guildMemberAdd", async (member) => {
 			//Assumes a moderator isn't deleting invites.
 			if(!guildInvites.get(i.code) && (i.uses+1 == i.maxUses)) return true
 			//If the invite exists, check if the use count increased
-			else return i.uses < guildInvites.get(i.code) ? guildInvites.get(i.code).uses : 0
+			else return i.uses < guildInvites.get(i.code).uses
 		});
 		//Logs the invite info
 		LogChannel(member.guild, {embed: {
