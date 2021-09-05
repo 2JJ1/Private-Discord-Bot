@@ -174,7 +174,7 @@ client.on('message', async msg => {
 		//Command parsing is initiated with ! at the beginning of the chat
 		if (msg.content.substring(0,1) === settings.prefix) await commands.HandleCommand(msg, settings)
 		//Check for defined key words and auto respond (If enabled)
-		else if(settings.autoResponder){
+		else if(settings.autoResponder && (msg.member.roles.cache.filter(role => settings.autoResponders.ignoreRoles.indexOf(role.name.toLowerCase()) !== -1).size <= 0)){
 			var responders = settings.autoResponders
 			/*Even though it's turned on, they might not have actually created 
 			any checkers, so check */

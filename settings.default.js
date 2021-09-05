@@ -22,6 +22,8 @@ module.exports = {
     //"Uhhh hello world!!!" -> Bot responds with  "Hello world!"
     //"Uhhh hello planet!!!" -> Bot responds with  "Hello world!"
     autoResponders: {
+        //Roles which the autoresponder will ignore. Lower case only.
+        ignoreRoles: ["moderator", "admin", "mini-moderator"],
         checkers: [
             [["hello", "hi"],["world", "planet"]],
             [["dm", "message", "pm"], "me"],
