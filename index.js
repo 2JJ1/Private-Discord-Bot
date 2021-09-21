@@ -149,7 +149,7 @@ client.on('messageCreate', async msg => {
 	//Don't handle messages from bots
 	if(msg.author.bot) return
 	//Only handle messages in guild text channels
-	if(msg.channel.type !== "text") return
+	if(msg.channel.type !== "GUILD_TEXT") return
 
 	//Throttle message handling per guild to prevent the bot from going unresponsive due to stress
 	if(settings.throttleMessages){
