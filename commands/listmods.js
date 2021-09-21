@@ -3,7 +3,7 @@ module.exports = async function(msg){
 	//Grabs list of members with the ADMINISTRATOR permission or admin role (Except for bots)
 	var admins = (await msg.guild.members.fetch()).filter(member => { 
 		return (
-			(member.hasPermission("ADMINISTRATOR") || member.roles.cache.find(roles => roles.name.toLowerCase() === 'admin')) && 
+			(member.permissions.has("ADMINISTRATOR") || member.roles.cache.find(roles => roles.name.toLowerCase() === 'admin')) && 
 			member.user.bot === false
 		)
 	})

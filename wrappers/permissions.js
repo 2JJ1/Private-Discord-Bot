@@ -37,7 +37,7 @@ class Permisisons{
         }
 
         //Check if guild member has the admin permission
-        if(guildMember.hasPermission("ADMINISTRATOR")) return true
+        if(guildMember.permissions.has("ADMINISTRATOR")) return true
 
         //Check if the guild member has the admin role
         if(guildMember.roles.cache.get(roleId) !== undefined) return true;
