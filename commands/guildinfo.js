@@ -5,7 +5,7 @@ const { stripIndents } = require("common-tags")
 const settings = require("../settings")
 
 module.exports = async function(msg){
-    var totalBans = (await msg.guild.fetchBans()).size
+    var totalBans = (await msg.guild.bans.fetch()).size
 
     var rateLimitKicksPerDay = settings.modCommands.rateLimitKicksPerDay
     

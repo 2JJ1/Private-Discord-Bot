@@ -43,7 +43,7 @@ module.exports = async function(msg){
 	}
 
 	//Check if the user is banned
-    var bannedMember = (await msg.guild.fetchBans()).get(targetid)
+    var bannedMember = (await msg.guild.bans.fetch()).get(targetid)
 	if(bannedMember) throw "That user is already banned"
 	
 	var kicks = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../flatdbs/kicks.json"), {encoding: "utf8", flag: "a+"}) || "[]")

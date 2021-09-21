@@ -21,8 +21,8 @@ module.exports = async function(msg){
     
     //Go through each guild member with the mute role and remove their role
     if(members.size > 0){
-        msg.channel.send(`Removing ${members.size} mute${members.size > 0 ? "s" : ""}`);
-        members = members.array()
+        msg.channel.send(`Removing ${members.size} mute${members.size > 1 ? "s" : ""}`);
+        members = [...members.values()]
         for(var i=0; i<members.length; i++){
             await members[i].roles.remove(mutedRoleId)
             .catch((err) => {

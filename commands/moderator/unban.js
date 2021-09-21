@@ -28,7 +28,7 @@ module.exports = async function(msg){
 	if(!targetid) throw "Please make sure the mention is formatted as '<@theirsnowflakeid>'"
 
     //Check if the user is banned
-    var bannedMember = (await msg.guild.fetchBans()).get(targetid)
+    var bannedMember = (await msg.guild.bans.fetch()).get(targetid)
     if(!bannedMember) throw "That user is not banned"
     
     //The actual unban part

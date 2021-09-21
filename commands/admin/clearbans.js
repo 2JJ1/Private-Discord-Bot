@@ -10,12 +10,12 @@ module.exports = async function(msg){
     if(!(await permissions.IsAdmin(msg.member))) throw "You must be an admin to use this"
 
     //Fetch guild members with mute role
-    var members = await msg.guild.fetchBans()
+    var members = await msg.guild.bans.fetch()
     
     //Go through each guild member with the mute role and remove their role
     if(members.size > 0){
-        msg.channel.send(`Removing ${members.size} ban${members.size > 0 ? "s" : ""}`);
-        members = members.array()
+        msg.channel.send(`Removing ${members.size} ban${members.size > 1 ? "s" : ""}`);
+        members = [...members.values()]
         for(var i=0; i<members.length; i++){
             await msg.guild.members.unban(members[i].user.id)
             .catch((err) => {
