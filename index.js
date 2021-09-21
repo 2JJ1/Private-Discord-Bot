@@ -145,7 +145,7 @@ client.on("guildMemberAdd", async (member) => {
 	}
 });
 
-client.on('message', async msg => {
+client.on('messageCreate', async msg => {
 	//Don't handle messages from bots
 	if(msg.author.bot) return
 	//Only handle messages in guild text channels
