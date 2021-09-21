@@ -10,12 +10,12 @@
     "discord.js": "^13.1.0",
     "dotenv": "^8.2.0",
     "latinize": "^0.4.1",
+    "lodash": "^4.17.21",
     "minimist": "^1.2.5",
     "moment": "^2.27.0",
     "safe-regex": "^2.1.1",
     "string-argv": "^0.3.1"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

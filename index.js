@@ -6,6 +6,7 @@ const throttler = require('./my_modules/throttler')
 const settings = require("./settings")
 const fs = require("fs")
 const path = require("path")
+const lodash = require("lodash")
 const commands = require('./commands/handler')
 const TextHasWords = require('./my_modules/texthaswords')
 const CleanRespond = require('./my_modules/cleanrespond')
@@ -17,10 +18,6 @@ require('./wrappers/permissions')
 
 // A pretty useful method to create a delay without blocking the whole script.
 const wait = require('util').promisify(setTimeout);
-
-// Initialize the invite cache
-const invites = {};
-
 
 client.on('ready', async () => {
 	// "ready" isn't really ready. We need to wait a spell.
@@ -55,12 +52,8 @@ client.on('ready', async () => {
 		fs.writeFileSync(path.resolve(__dirname, "./flatdbs/mutes.json"), JSON.stringify(mutes))
 	}, 1000 * 60 * 30)
 
-	// Load all invites for all guilds and save them to the cache.
-	settings.trackInvites && client.guilds.cache.forEach(g => {
-		g.fetchInvites().then(guildInvites => {
-		  invites[g.id] = guildInvites;
-		});
-	});
+	// Load all invites for all guilds to initialize caches for first comparison
+	settings.trackInvites && client.guilds.cache.forEach(async g => await g.invites.fetch())
 });
 
 //Called when someone joins the server
@@ -100,11 +93,11 @@ client.on("guildMemberAdd", async (member) => {
 	if(settings.welcomeMessage) member.user.send(settings.welcomeMessage).catch(error => {})
 
 	//Track what invite they used by seeing which invite has incremented
-	settings.trackInvites && member.guild.fetchInvites().then(guildInvites => {
-		// This is the *existing* invites for the guild.
-		const ei = invites[member.guild.id];
-		// Update the cached invites for the guild.
-		invites[member.guild.id] = guildInvites;
+	if(settings.trackInvites){
+		//*Previous* invites for the guild
+		const ei = lodash.cloneDeep(member.guild.invites.cache)
+		//*Current* invites for the guild
+		const guildInvites = await member.guild.invites.fetch()
 		// Look through the invites, find the one for which the uses went up.
 		const invite = ei.find(i => {
 			//If the invite doesn't exist and maxUses is about to max, likely deleted by Discord due to maxUses.
@@ -114,35 +107,42 @@ client.on("guildMemberAdd", async (member) => {
 			else return i.uses < guildInvites.get(i.code).uses
 		});
 		//Logs the invite info
-		LogChannel(member.guild, {embed: {
-			author: {
-				name: `New Member: ${member.user.tag}`,
-				icon_url: member.user.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
-			},
-			fields: [
-				{
-					name: "Member ID",
-					value: member.user.id,
-					inline: true
+		LogChannel(member.guild, {
+			embeds: [{
+				author: {
+					name: `New Member: ${member.user.tag}`,
+					icon_url: member.user.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
 				},
-				{
-					name: "Invite Code",
-					value: invite ? invite.code : "?",
-					inline: true
-				},
-				{
-					name: "Invited By",
-					value: invite ? `<@${invite.inviter.id}>` : "?",
-					inline: true
-				},
-				{
-					name: "Invite uses",
-					value: invite ? `${invite.uses + 1}/${invite.maxUses || "inf"}` : "?",
-					inline: true
-				}
-			]
-		}})
-	});
+				fields: [
+					{
+						name: "Member ID",
+						value: member.user.id,
+						inline: true
+					},
+					{
+						name: "Invite Code",
+						value: invite ? invite.code : "?",
+						inline: true
+					},
+					{
+						name: "Invited By",
+						value: invite ? `<@${invite.inviter.id}>` : "?",
+						inline: true
+					},
+					{
+						name: "Invite uses",
+						value: invite ? `${invite.uses + 1}/${invite.maxUses || "inf"}` : "?",
+						inline: true
+					},
+					{
+						name: "Temporary Invite",
+						value: invite ? (invite.temporary ? "Yes" : "No") : "?",
+						inline: true
+					}
+				]
+			}]
+		})
+	}
 });
 
 client.on('message', async msg => {
