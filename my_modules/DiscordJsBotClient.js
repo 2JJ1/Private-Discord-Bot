@@ -9,7 +9,8 @@ const client = new Client({
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Intents.FLAGS.DIRECT_MESSAGES,
-    ]
+    ],
+    allowedMentions: {parse: ['users', 'roles'], repliesUser: true}
 });
 
 //Created a whole module so I could reuse the object

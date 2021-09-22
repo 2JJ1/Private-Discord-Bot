@@ -4,9 +4,12 @@
   "description": "Discord bot designed for use in a single server. No database software required! Just download the project, setup the .env and settings file, then run index.js. This was designed for use with in only one guild.",
   "main": "index.js",
   "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
     "anti-ip-logger": "^1.0.1",
     "cleverbot-free": "^1.0.4",
     "common-tags": "^1.8.0",
+    "discord-api-types": "^0.23.1",
     "discord.js": "^13.1.0",
     "dotenv": "^8.2.0",
     "latinize": "^0.4.1",

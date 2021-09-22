@@ -1,0 +1,131 @@
+//Command handler
+
+var {Collection} = require('discord.js')
+var {SlashCommandBuilder} = require('@discordjs/builders')
+const client = require('../my_modules/DiscordJsBotClient')
+
+var { parseArgsStringToArgv } = require('string-argv');
+var parseArgs = require('minimist')
+
+const commands = {
+    //Admin cmmands
+    "addmod": {
+        handler: require('./admin/addmod'),
+        description: "Gives the selected member moderator permissions.",
+    },
+    "removemod": {
+        handler: require('./admin/removemod'),
+        description: "Removes moderator permissions from the selected member.",
+    },
+    "clearmutes": {
+        handler: require('./admin/clearmutes.js'),
+        description: "Unmutes all members of this guild.",
+    },
+    "clearwarns": {
+        handler: require('./admin/clearwarns.js'),
+        description: 'Removes the "warned" role from all members of this guild.',
+    },
+    "clearbans": {
+        handler: require('./admin/clearbans.js'),
+        description: "Unbans all banned users.",
+    },
+    //Moderator commands
+    "addminimod": {
+        handler: require('./moderator/addminimod'),
+        description: "Adds mini-moderator permissions to the selected member.",
+    },
+    "removeminimod": {
+        handler: require('./moderator/removeminimod'),
+        description: 'Removes mini-moderator permissions from the selected member.',
+    },
+    "ban": {
+        handler: require('./moderator/ban'),
+        description: "Bans the selected member from this guild.",
+    },
+    "unban": {
+        handler: require('./moderator/unban'),
+        description: "Unbans the selected user from this guild."
+    },
+    "kick": {
+        handler: require('./moderator/kick'),
+        description: "Kicks the selected member from this guild.",
+    },
+    "mute": {
+        handler: require('./moderator/mute'),
+        description: "Mutes the selected member in all text and voice channels.",
+    },
+    "unmute": {
+        handler: require('./moderator/unmute'),
+        description: "Returns messaging and voice abilities to the selected member.",
+    },
+    "warn": {
+        handler: require('./moderator/warn'),
+        description: 'Adds the "warned" role to the selected member. Useful as a red flag marker.',
+    },
+    "unwarn": {
+        handler: require('./moderator/unwarn'),
+        description: 'Removes the "warned" role from the selected member.',
+    },
+    "purge": {
+        handler: require('./moderator/purge'),
+        description: 'Removes a selected amount of messages from this text channel.',
+    },
+    "slowmode": {
+        handler: require('./moderator/slowmode'),
+        description: "Slows down the rate of messages members can send in this text channel",
+    },
+    "addrole": {
+        handler: require('./moderator/addrole'),
+        description: 'Adds the selected role to the selected member.',
+    },
+    "removerole": {
+        handler: require('./moderator/removerole'),
+        description: 'Removes the selected role from the selected member.',
+    },
+    "reboot": {
+        handler: require("./moderator/reboot"),
+        description: 'Attempts to restart the bot. Useful for if the bot freezes up.',
+    },
+    //Fun commands
+    "meme": {
+        handler: require('./funcommands/meme'),
+        description: 'Grabs a random meme online and displays it.',
+    },
+    "8ball": {
+        handler: require('./funcommands/8ball'),
+        description: 'Asks the gods for an answer to your yes or no question.',
+    },
+    "joke": {
+        handler: require('./funcommands/joke'),
+        description: 'Sends a joke in the text channel',
+    },
+    "roast": {
+        handler: require('./funcommands/roast'),
+        description: 'Insults you in the text channel.',
+    },
+    "compile": {
+        handler: require('./funcommands/compile'),
+        description: 'Executes the selected code.',
+    },
+}
+
+client.commands = new Collection();
+for(var command in commands){
+    let builder = new SlashCommandBuilder()
+        .setName(command)
+        .setDescription(commands[command].description);
+
+    client.commands.set(command, builder)
+}
+
+class Commands{
+    async HandleCommand(interaction){
+        if (!interaction.isCommand()) return;
+        console.log({interaction})
+
+	    const { commandName } = interaction;
+        await commands[commandName](interaction)
+    }
+}
+
+module.exports = new Commands();

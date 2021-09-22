@@ -7,7 +7,9 @@ const settings = require("./settings")
 const fs = require("fs")
 const path = require("path")
 const lodash = require("lodash")
-const commands = require('./commands/handler')
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
+const {Collection} = require("discord.js")
 const TextHasWords = require('./my_modules/texthaswords')
 const CleanRespond = require('./my_modules/cleanrespond')
 const AntiSpam = require('./my_modules/antispam')
@@ -145,6 +147,45 @@ client.on("guildMemberAdd", async (member) => {
 	}
 });
 
+
+/** Command Handler */
+const commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	commands.set(command.data.name, command);
+}
+
+const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
+
+(async () => {
+	try {
+		console.log('Started refreshing application (/) commands.');
+
+		await rest.put(
+			Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILDID),
+			{ body: commands.map(command => { return command.data }) },
+		);
+
+		console.log('Successfully reloaded application (/) commands.');
+	} catch (error) {
+		console.error(error);
+	}
+})();
+
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+	console.log({interaction})
+
+	const { commandName } = interaction;
+	let command = commands.get(commandName)
+	console.log({command})
+	await command.execute(interaction)
+});
+
+/** End Command Handler */
+
 client.on('messageCreate', async msg => {
 	//Don't handle messages from bots
 	if(msg.author.bot) return
@@ -171,10 +212,8 @@ client.on('messageCreate', async msg => {
 		//Deletes IP loggers (If enabled)
 		if(settings.antiIPLog && await antiIPLogger(msg.content)) return msg.delete({reason: "IP logger domain found."})
 
-		//Command parsing is initiated with ! at the beginning of the chat
-		if (msg.content.substring(0,1) === settings.prefix) await commands.HandleCommand(msg, settings)
 		//Check for defined key words and auto respond (If enabled)
-		else if(settings.autoResponder && (msg.member.roles.cache.filter(role => settings.autoResponders.ignoreRoles.indexOf(role.name.toLowerCase()) !== -1).size <= 0)){
+		if(settings.autoResponder && (msg.member.roles.cache.filter(role => settings.autoResponders.ignoreRoles.indexOf(role.name.toLowerCase()) !== -1).size <= 0)){
 			var responders = settings.autoResponders
 			/*Even though it's turned on, they might not have actually created 
 			any checkers, so check */
