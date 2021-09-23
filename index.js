@@ -176,11 +176,9 @@ const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
-	console.log({interaction})
 
 	const { commandName } = interaction;
 	let command = commands.get(commandName)
-	console.log({command})
 	await command.execute(interaction)
 });
 
