@@ -9,6 +9,7 @@ const client = new Client({
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Intents.FLAGS.DIRECT_MESSAGES,
+        Intents.FLAGS.GUILD_PRESENCES,
     ],
     allowedMentions: {parse: ['users', 'roles'], repliesUser: true}
 });
