@@ -150,12 +150,15 @@ client.on("guildMemberAdd", async (member) => {
 
 /** Command Handler */
 const commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	commands.set(command.data.name, command);
+function traverseCommands(commandsPath){
+	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	for (const file of commandFiles) {
+		const command = require(`${commandsPath}/${file}`);
+		commands.set(command.data.name, command);
+	}
 }
+traverseCommands("./commands")
+traverseCommands("./commands/funcommands")
 
 const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 

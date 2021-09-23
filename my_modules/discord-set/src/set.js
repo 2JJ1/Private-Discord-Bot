@@ -24,13 +24,13 @@ class Handler extends EventEmitter {
      * @param {Object} option option
      */
 
-    meme(channel, redditors = [], option = { readyMade: true }) {
+    meme(interaction, redditors = [], option = { readyMade: true }) {
         const def = [
             "me_irl",
             "Dankmemes",
             "funny"
         ];
-        if (!channel) throw new TypeError("Channel was not provided!");
+        if (!interaction) throw new TypeError("Channel was not provided!");
         if (redditors.length < 1) redditors = def;
         if (option.readyMade === false) {
             return this.handle(`https://api.reddit.com/r/${redditors[Math.floor(Math.random() * redditors.length)]}/random`).then(d => {
@@ -51,15 +51,15 @@ class Handler extends EventEmitter {
             this.handle(`https://api.reddit.com/r/${redditors[Math.floor(Math.random() * redditors.length)]}/random`)
                 .then(d => {
                     const data = d[0].data.children[0].data;
-                    const em = this.embed
-                        .setTitle(`${data.title.substring(0, 256)}`)
-                        .setURL(`https://reddit.com${data.permalink}`)
-                        .setImage(data.url)
-                        .setColor("BLURPLE")
-                        .setFooter(`${data.ups} 👍 | ${data.downs} 👎 | ${data.num_comments} 💭`)
-                        .setTimestamp();
 
-                    channel.send(em);
+                    //interaction.reply({ embeds: [em] });
+                    interaction.reply({embeds: [{
+                        title: `${data.title.substring(0, 256)}`,
+                        url: `https://reddit.com${data.permalink}`,
+                        image: {url: data.url},
+                        color: "BLURPLE",
+                        footer: {text: `${data.ups} 👍 | ${data.downs} 👎 | ${data.num_comments} 💭`},
+                    }]})
                 });
         }
     }

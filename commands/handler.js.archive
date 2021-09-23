@@ -86,27 +86,6 @@ const commands = {
         handler: require("./moderator/reboot"),
         description: 'Attempts to restart the bot. Useful for if the bot freezes up.',
     },
-    //Fun commands
-    "meme": {
-        handler: require('./funcommands/meme'),
-        description: 'Grabs a random meme online and displays it.',
-    },
-    "8ball": {
-        handler: require('./funcommands/8ball'),
-        description: 'Asks the gods for an answer to your yes or no question.',
-    },
-    "joke": {
-        handler: require('./funcommands/joke'),
-        description: 'Sends a joke in the text channel',
-    },
-    "roast": {
-        handler: require('./funcommands/roast'),
-        description: 'Insults you in the text channel.',
-    },
-    "compile": {
-        handler: require('./funcommands/compile'),
-        description: 'Executes the selected code.',
-    },
 }
 
 client.commands = new Collection();
