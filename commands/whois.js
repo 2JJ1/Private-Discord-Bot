@@ -16,7 +16,6 @@ module.exports = {
     async execute(interaction){
         let user = interaction.options.getUser("user", true)
         if(!user) throw "You must mention someone"
-        console.log({user})
 
         var embed = {
             title: `${user.username}'s Information`,
