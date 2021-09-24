@@ -12,28 +12,27 @@ module.exports = {
                 .setDescription('The mini-moderator that you would like to remove.')
                 .setRequired(true)
         ),
-	async execute(msg){
+	async execute(interaction){
 		//Check if settings allow this command
 		if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
 		if(settings.modCommands.removeMinimod === false) throw "The removeMinimod command module is disabled"
 
 		//Author must be an moderator
-		if(!(await permissions.IsModerator(msg.member))) throw "You are not a moderator"
+		if(!(await permissions.IsModerator(interaction.member))) throw "You are not a moderator"
 		
 		//There must be a mention
-		var firstMention = msg.mentions.users.first()
-		if(!firstMention) throw 'You must mention someone'
-		let target = (await msg.guild.members.fetch()).get(firstMention.id)
-		if(!target) throw 'Could not find user...'
+        let user = interaction.options.getUser("user", true)
+        let member = (await interaction.guild.members.fetch()).get(user.id)
+        if(!member) throw 'Could not find user...'
 		
 		//Can't remove mini-mod from someone whos not a mini mod
-		if(!(await permissions.IsMiniModerator(target))) throw "That member is not a mini-moderator"
+		if(!(await permissions.IsMiniModerator(member))) throw "That member is not a mini-moderator"
 
 		//Find the role
-		var role = msg.guild.roles.cache.find(role => role.name.toLowerCase() === "mini-moderator")
+		var role = interaction.guild.roles.cache.find(role => role.name.toLowerCase() === "mini-moderator")
 		if(!role) throw "Could not find a role named 'mini-moderator' in this guild. This means the user is already not a mini-moderator"
-		//Removes the role from the target
-		await target.roles.remove(role)
-		msg.channel.send(`<@${target.id}> is no longer a mini-moderator`);
+		//Removes the role from the member
+		await member.roles.remove(role)
+		interaction.reply(`<@${member.id}> is no longer a mini-moderator`);
 	}
 }

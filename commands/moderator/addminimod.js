@@ -21,7 +21,7 @@ module.exports = {
         if(!(await permissions.IsModerator(interaction.member))) throw "You are not a moderator"
 
         //There must be a mention
-        var user = interaction.options.getUser("user", true)
+        let user = interaction.options.getUser("user", true)
         let member = (await interaction.guild.members.fetch()).get(user.id)
         if(!member) throw 'Could not find user...'
 
@@ -33,9 +33,7 @@ module.exports = {
         var roleId = interaction.guild.roles.cache.find(role => role.name.toLowerCase() === "mini-moderator").id
         
         //Adds moderator role to mentioned user
-        member.roles.add(roleId)
-        .then(function(){
-            interaction.channel.send(`<@${member.id}> is now a mini-moderator`);
-        })
+        await member.roles.add(roleId)
+        interaction.reply(`<@${member.id}> is now a mini-moderator`);
     }
 }
