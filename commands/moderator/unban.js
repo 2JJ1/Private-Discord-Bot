@@ -22,30 +22,16 @@ module.exports = {
             let isMod = await permissions.IsModerator(interaction.member)
             if(isMod !== true)  throw {safe: 'You are not a moderator'};
 
-            //Grab target to unban
-            var targetid;
-            
-            //The member isn't in the guild, so pattern check and grab the id that way
-            let arr = interaction.content.split(" ")
-            let pattern = /<@!?(\d{17,19})>/
-            for(let i=0; i<arr.length; i++){
-                var match = arr[i].match(pattern)
-                if(match != null){
-                    targetid = match[1]
-                    break;
-                }
-            }
-
-            //A mention is required
-            if(!targetid) throw "Please make sure the mention is formatted as '<@theirsnowflakeid>'"
+            //Who to unban
+			let targetUser = interaction.options.getUser("user", true)
 
             //Check if the user is banned
-            var bannedMember = (await interaction.guild.bans.fetch()).get(targetid)
+            var bannedMember = (await interaction.guild.bans.fetch()).get(targetUser.id)
             if(!bannedMember) throw "That user is not banned"
             
             //The actual unban part
-            await interaction.guild.members.unban(targetid, `Unbanned by <@${interaction.author.id}>`)
-            interaction.channel.send(`<@${targetid}> has been unbanned.`)
+            await interaction.guild.members.unban(targetUser.id, `Unbanned by <@${interaction.user.id}>`)
+            interaction.reply(`<@${targetUser.id}> has been unbanned.`)
         }
 		catch(e){
 			if(typeof e === "string") interaction.reply(`Error: ${e}`)
