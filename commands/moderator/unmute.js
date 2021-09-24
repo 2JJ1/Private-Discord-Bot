@@ -26,17 +26,14 @@ module.exports = {
 			if(!isMod && !isMiniMod) throw "You can't execute that command"
 
 			//Who to unmute
-			if(interaction.mentions.users.first() === undefined) throw 'You must mention someone'
-			let targetid = interaction.mentions.users.first().id;
-			let target = (await interaction.guild.members.fetch()).get(targetid)
-			if(!target) throw 'Could not find user...'
+			var targetMember = interaction.options.getMember("member", true)
 
 			//Mini mods can't mute mini mods
-			if(!isMod && isMiniMod && (await permissions.IsMiniModerator(target))) throw "Mini-moderators can't unmute mini-moderators"
+			if(!isMod && isMiniMod && (await permissions.IsMiniModerator(targetMember))) throw "Mini-moderators can't unmute mini-moderators"
 
 			//Removes from the mutes database so they aren't remuted if they rejoin the guild
 			var mutes = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../../flatdbs/mutes.json"), {encoding: "utf8", flag: "a+"}) || "{}")
-			delete mutes[targetid]
+			delete mutes[targetMember.id]
 			fs.writeFileSync(path.resolve(__dirname, "../../flatdbs/mutes.json"), JSON.stringify(mutes))
 
 			//Finds the mute role
@@ -44,9 +41,9 @@ module.exports = {
 			if(!mutedRole) throw "Could not find a role named 'muted' in this guild. This means the user is already unmuted."
 
 			//Removes the role from the member
-			await target.roles.remove(mutedRole)
+			await targetMember.roles.remove(mutedRole)
 
-			interaction.channel.send("<@" + targetid + "> is no longer muted!");
+			interaction.reply(`<@${targetMember.id}> is no longer muted.`)
 		}
 		catch(e){
 			if(typeof e === "string") interaction.reply(`Error: ${e}`)

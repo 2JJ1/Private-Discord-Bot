@@ -12,6 +12,22 @@ module.exports = {
 				.setName("member")
 				.setDescription("The member that you want to mute.")
 				.setRequired(true)
+		)
+		.addStringOption(option =>
+			option
+				.setName("reason")
+				.setDescription("Why do you want to mute this user?")
+				.setRequired(true)
+		)
+		.addNumberOption(option =>
+			option
+				.setName("days")
+				.setDescription("How many days do you want them to be muted?")	
+		)
+		.addNumberOption(option =>
+			option
+				.setName("hours")
+				.setDescription("How many hours do you want them to be muted?")	
 		),
 	async execute(interaction){
 		try{
@@ -25,20 +41,17 @@ module.exports = {
 			if(!isMod && !isMiniMod) throw "You can't execute that command"
 
 			//Who to mute
-			if(!interaction.mentions.users.first()) throw 'You must mention someone'
-			let targetid = interaction.mentions.users.first().id;
-			let target = (await interaction.guild.members.fetch()).get(targetid)
-			if(!target) throw 'Could not find user...'
+			var targetMember = interaction.options.getMember("member", true)
 
 			//Mini mods can't mute mini mods
-			if(!isMod && isMiniMod && (await permissions.IsMiniModerator(target))) throw "Mini-moderators can't mute mini-moderators"
+			if(!isMod && isMiniMod && (await permissions.IsMiniModerator(targetMember))) throw "Mini-moderators can't mute mini-moderators"
 								
 			//Applies mute role
 			await mutemember({
 				interaction,
-				target,
-				hours: interaction.opts.hours,
-				days: interaction.opts.days,
+				target: targetMember,
+				days: interaction.options.getNumber("days"),
+				hours: interaction.options.getNumber("hours"),
 			})
 		}
 		catch(e){

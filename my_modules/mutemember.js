@@ -6,13 +6,17 @@ const permissions = require('../wrappers/permissions')
  * Is a module since the mute function is complex and reused
  */
 module.exports = async function(opts){
-    var {msg, target, hours, days, reason} = opts
+    var {interaction, msg, target, hours, days, reason} = opts
 
-    //If the target is not specified, assume the msg author is the target
+    //If the target is not specified, assume the msg author is the target. Such as when automuted for spam.
     if(!target && msg) target = msg.member
 
     let targetIsMod = await permissions.IsModerator(target)
     if(targetIsMod) throw "You can't mute a moderator!"
+
+    let requester = interaction.user || msg.author
+    let guild = interaction.guild || msg.guild
+    let channel = interaction.channel || msg.channel
     
     //Don't continue if they're already muted
     if(
@@ -20,7 +24,7 @@ module.exports = async function(opts){
         !opts.days && //Unless they want to update the timer
         !opts.hours && //Unless they want to update the timer
         !(opts.by !== "bot") //So anti-spamraid's late processing doesn't flood the message
-    ) msg && msg.channel.send("They are already muted.");
+    ) channel && channel.send("They are already muted.");
 
 	// Handles timed mute
 	var expireDate = null
@@ -45,16 +49,13 @@ module.exports = async function(opts){
     }
 
     //Why they were muted
-    if(!reason){
-        //If specified through an option
-        if(msg.opts.reason) reason = msg.opts.reason
-        //Otherwise, assume anything after the mention is the reason unless any other option is specified
-        else if(Object.keys(msg.opts).length <= 0){
-            let match = msg.content.match(/<@!?(\d{17,19})>/)
-            if(match) reason = msg.content.substr(match.index + match[0].length + 1)
-        }
-        reason = (reason && (reason.length > 2000 ? reason.substr(0,2000) + "..." : reason)) || "Not specified"
-    }
+    //If reason not specified in opts, check interaction options 
+    if(!reason && interaction){
+        reason = interaction.options.getString("reason")
+        //Reason character limit. If the reason is empty, use placeholder.
+        reason = reason ? (reason.length > 1500 ? reason.substr(0,1500) + "..." : reason) : "Not specified"
+    } 
+    else reason = 'Not specified'
 
 	//Fetch the "muted" role's id if it exists
 	var mutedRole = target.guild.roles.cache.find(role => role.name.toLowerCase() === "muted")
@@ -96,23 +97,24 @@ module.exports = async function(opts){
 			}
 		})
 
-		msg && msg.channel.send("Because the mute role did not exist, I have automatically created and configured it. A server admin may want to double check the muted role's hierarchical position. Members that are above the role will not be muted. They may also want to check with the text/voice channel specific permissions.");
+		channel && channel.send("Because the mute role did not exist, I have automatically created and configured it. A server admin may want to double check the muted role's hierarchical position. Members that are above the role will not be muted. They may also want to check with the text/voice channel specific permissions.");
 	}
 
 	//Applies the role
-	target.roles.add(mutedRoleId, reason)
-	.then(async () => {
-        (opts.by !== "bot") && msg && msg.channel.send(`<@${target.id}> is muted${hours?` for ${hours} hour${hours>1?"s":""}`:''}${days?` for ${days} day${days>1?"s":""}`:''}.`)
-        
-        //Log to database to prevent people from rejoining
-        var mutes = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../flatdbs/mutes.json"), {encoding: "utf8", flag: "a+"}) || "{}")
-        mutes[target.id] = {
-            expires: expireDate
-        }
-        fs.writeFileSync(path.resolve(__dirname, "../flatdbs/mutes.json"), JSON.stringify(mutes))
-    })
+	await target.roles.add(mutedRoleId, reason)
     .catch(() => { throw "I can't apply the mute role right now. Please check my permissions or role positioning." })
 
-    target.send(`You were muted in "${msg.guild.name}" by ${msg.author.tag}${hours?` for ${hours} hour${hours>1?"s":""}`:''}${days?` for ${days} day${days>1?"s":""}`:''}.${reason?` Reason: ${reason}.`:''}`)
+    //If done by slash command, reply must be sent to complete event
+    if((opts.by !== "bot") && interaction) 
+        interaction.reply(`<@${target.id}> is muted${hours?` for ${hours} hour${hours>1?"s":""}`:''}${days?` for ${days} day${days>1?"s":""}`:''}.`)
+    
+    //Log to database to prevent people from rejoining
+    var mutes = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../flatdbs/mutes.json"), {encoding: "utf8", flag: "a+"}) || "{}")
+    mutes[target.id] = {
+        expires: expireDate
+    }
+    fs.writeFileSync(path.resolve(__dirname, "../flatdbs/mutes.json"), JSON.stringify(mutes))
+
+    target.send(`You were muted in "${guild.name}" by ${requester.tag}${hours?` for ${hours} hour${hours>1?"s":""}`:''}${days?` for ${days} day${days>1?"s":""}`:''}.${reason?` Reason: ${reason}.`:''}`)
     .catch(()=>{})
 }
