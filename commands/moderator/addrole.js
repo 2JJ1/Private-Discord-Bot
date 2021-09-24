@@ -29,41 +29,23 @@ module.exports = {
 			let isMiniMod = await permissions.IsMiniModerator(interaction.member)
 			if(!isMod && !isMiniMod) throw "You can't execute that command"
 
-			//Split the message for command parsing
-			let commandSplit = interaction.content.split(" ")
-
 			//Who to add the role to
-			if(!interaction.mentions.users.first()) throw 'You must mention someone'
-			let targetid = interaction.mentions.users.first().id;
-			let target = (await interaction.guild.members.fetch()).get(targetid)
-			if(!target) throw 'Could not find user...'
-			
+			let user = interaction.options.getUser("member", true)
+			let member = (await interaction.guild.members.fetch()).get(user.id)
+			if(!member) throw 'Could not find user...'
+		
 			//What role to add
-			let role
-			//First check if the role name option was specified
-			if(interaction.opts.name) role = interaction.guild.roles.cache.find(role => role.name.toLowerCase() === interaction.opts.name.toLowerCase())
-			//Otherwise check if the role was mentioned
-			else {
-				let pattern = /<@&?(\d{17,19})>/
-				for(let i=0; i<commandSplit.length; i++){
-					var match = commandSplit[i].match(pattern)
-					if(match != null){
-						role = interaction.guild.roles.cache.find(role => role.id == match[1])
-						break;
-					}
-				}
-			}
-			if(!role) throw "That role doesn't exist"
+			let role = interaction.options.getRole("role", true)
 
 			//Check if the role ID is whitelisted
 			//Used find instead of indexOf for support of string and numbered role id indexes
-			if(!settings.modCommands.addRoleWhitelist.find(e => e === role.name)) throw "That role is not whitelisted as addable"
+			if(!settings.modCommands.addRoleWhitelist.find(e => e.toLowerCase() === role.name.toLowerCase())) throw "That role is not whitelisted as addable"
 
 			//Apply the role
-			await target.roles.add(role, `Added by <@${interaction.author.id}>`)
+			await member.roles.add(role, `Added by <@${interaction.user.id}>`)
 			
 			//Confirm completion
-			interaction.react("✅")
+			interaction.reply({content: `Added the \`@${role.name}\` role to <@${user.id}>.`, ephemeral: true})
 		}
 		catch(e){
 			if(typeof e === "string") interaction.reply(`Error: ${e}`)
