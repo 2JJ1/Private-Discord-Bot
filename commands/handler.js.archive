@@ -29,63 +29,6 @@ const commands = {
         handler: require('./admin/clearbans.js'),
         description: "Unbans all banned users.",
     },
-    //Moderator commands
-    "addminimod": {
-        handler: require('./moderator/addminimod'),
-        description: "Adds mini-moderator permissions to the selected member.",
-    },
-    "removeminimod": {
-        handler: require('./moderator/removeminimod'),
-        description: 'Removes mini-moderator permissions from the selected member.',
-    },
-    "ban": {
-        handler: require('./moderator/ban'),
-        description: "Bans the selected member from this guild.",
-    },
-    "unban": {
-        handler: require('./moderator/unban'),
-        description: "Unbans the selected user from this guild."
-    },
-    "kick": {
-        handler: require('./moderator/kick'),
-        description: "Kicks the selected member from this guild.",
-    },
-    "mute": {
-        handler: require('./moderator/mute'),
-        description: "Mutes the selected member in all text and voice channels.",
-    },
-    "unmute": {
-        handler: require('./moderator/unmute'),
-        description: "Returns messaging and voice abilities to the selected member.",
-    },
-    "warn": {
-        handler: require('./moderator/warn'),
-        description: 'Adds the "warned" role to the selected member. Useful as a red flag marker.',
-    },
-    "unwarn": {
-        handler: require('./moderator/unwarn'),
-        description: 'Removes the "warned" role from the selected member.',
-    },
-    "purge": {
-        handler: require('./moderator/purge'),
-        description: 'Removes a selected amount of messages from this text channel.',
-    },
-    "slowmode": {
-        handler: require('./moderator/slowmode'),
-        description: "Slows down the rate of messages members can send in this text channel",
-    },
-    "addrole": {
-        handler: require('./moderator/addrole'),
-        description: 'Adds the selected role to the selected member.',
-    },
-    "removerole": {
-        handler: require('./moderator/removerole'),
-        description: 'Removes the selected role from the selected member.',
-    },
-    "reboot": {
-        handler: require("./moderator/reboot"),
-        description: 'Attempts to restart the bot. Useful for if the bot freezes up.',
-    },
 }
 
 client.commands = new Collection();
