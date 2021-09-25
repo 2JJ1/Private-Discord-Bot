@@ -7,10 +7,25 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("purge")
 		.setDescription('Removes a selected messages from this text channel.')
-		.addUserOption(option => 
+		.addNumberOption(option =>
 			option
-				.setName("member")
-				.setDescription("The member that you want to ute.")
+				.setName("count")
+				.setDescription("How many messages do you want to delete? Default: 100")
+		)
+		.addStringOption(option =>
+			option
+				.setName("search")
+				.setDescription("Only deletes messages containing this phrase.")
+		)
+		.addUserOption(option =>
+			option
+				.setName("from")
+				.setDescription("Deletes messages only from this user.")
+		)
+		.addStringOption(option =>
+			option
+				.setName("regex")
+				.setDescription("(Advanced) Deletes messages only containing this regex pattern.")
 		),
 	async execute(interaction){
 		try{
@@ -20,82 +35,41 @@ module.exports = {
 
 			//Only moderators can purge
 			let hasPerm = await permissions.IsModerator(interaction.member)
-			if(hasPerm !== true) throw {safe: 'You can\'t execute that command'};
+			if(hasPerm !== true) throw 'You can\'t execute that command'
 
 			//Read how many messages the author wants to delete/sift through
-			var command = interaction.content.substring(1).toLowerCase().split(" ");
-			var count = parseInt(command[1]) //Also delete the command
-			if(!count || count === NaN) count = 100 //A count wasn't defined, so assume it is 100
-			else if(count <= 0) throw "Please specify a number from 1-100"
-			else if(count > 100) count = 100 //Discord API limits it to 100 messages
+			var count = interaction.options.getNumber("count")
+			if(count && (count < 3 || count > 100)) throw "Please specify a count from 3-100"
 
+			//Fetch the latest messages
+			let messages = await interaction.channel.messages.fetch({limit: count})
+			
 			//Delete messages that contain the exact string
-			if(interaction.opts.search){
-				//Purging would probably mean they dont want to see the command either
-				await interaction.delete({reason: `Purge command by <@${interaction.author.id}>`})
+			let search = interaction.options.getString("search")
+			if(search) messages = messages.filter(message => message.content.toLowerCase().includes(search.toLowerCase()))
 
-				//Normalize
-				interaction.opts.search = interaction.opts.search.toLowerCase()
-
-				interaction.channel.messages.fetch({limit: count})
-				//Grabs list of messages that include the string
-				.then(messages => messages.filter(message => message.content.toLowerCase().includes(interaction.opts.search)))
-				//Deletes each of the matched messages
-				.then(deleteQueue => {
-					deleteQueue.forEach(async _msg => await _msg.delete({reason: `Purge command by <@${interaction.author.id}>`}))
-					interaction.channel.send("<@" + interaction.author.id + `> deleted ${deleteQueue.size} chat(s)`)
-				})
-			}
-			//Delete messages that match the specified regex
-			else if(interaction.opts.regex){
-				if(!saferegex(interaction.opts.regex)) throw "That regex seems to require too much processing time. Try a faster one."
-
-				//Purging would probably mean they dont want to see the command either
-				await interaction.delete({reason: `Purge command by <@${interaction.author.id}>`})
-
-				let regex = RegExp(interaction.opts.regex)
-
-				interaction.channel.messages.fetch({limit: count})
-				//Grabs list of messages that matched the regex
-				.then(messages => messages.filter(message => regex.test(message.content)))
-				//Deletes each of the matched messages
-				.then(deleteQueue => {
-					deleteQueue.forEach(async _msg => await _msg.delete({reason: `Purge command by <@${interaction.author.id}>`}))
-					interaction.channel.send("<@" + interaction.author.id + `> deleted ${deleteQueue.size} chat(s)`)
-				})
-			}
 			//Deletes messages that are from the specified user
-			else if(interaction.opts.from){
-				//Purging would probably mean they dont want to see the command either
-				await interaction.delete({reason: `Purge command by <@${interaction.author.id}>`})
+			let from = interaction.options.getUser("from")
+			if(from) messages = messages.filter(message => message.author.id ===  from.id)
 
-				let targetId = interaction.opts.from.match(/<@!?(\d{17,19})>/)[1]
-				if(!targetId) throw 'Please mention someone after "--from"'
+			//Delete messages that match the specified regex
+			let regex = interaction.options.getString("regex")
+			if(regex){
+				//Some regexes can use up too much processing power and DoS the server
+				if(!saferegex(regex)) throw "Sorry, I won't run that regex."
 
-				interaction.channel.messages.fetch({limit: count})
+				regex = RegExp(regex)
+
 				//Grabs list of messages that matched the regex
-				.then(messages => messages.filter(message => message.author.id === targetId))
-				//Deletes each of the matched messages
-				.then(deleteQueue => {
-					deleteQueue.forEach(async _msg => await _msg.delete({reason: `Purge command by <@${interaction.author.id}>`}))
-					interaction.channel.send("<@" + interaction.author.id + `> deleted ${deleteQueue.size} chat(s) from <@${targetId}>`)
-				})
+				messages = messages.filter(message => regex.test(message.content))
 			}
-			//By default, delete the specified amount of latest messages
-			else {
-				//Purging would probably mean they dont want to see the command either
-				await interaction.delete({reason: `Purge command by <@${interaction.author.id}>`})
 
-				//The actual deleting part
-				interaction.channel.bulkDelete(count)
-				.then(messages => {
-					interaction.channel.send("<@" + interaction.author.id + `> deleted ${messages.size} chat(s)`)
-					.catch(e => {})
-				})
-				.catch(e => {
-					interaction.channel.send("Failed: I lack permissions or the messages are older than 14 days.")
-					.catch(e => {})
-				})
+			await interaction.reply(`Deleting ${messages.size} message${messages.size===1 ? "" : "s"}.`)
+
+			//Deletes each of the matched messages
+			for(let [id, message] of messages){
+				message.delete()
+				.catch(()=>{})
 			}
 		}
 		catch(e){
