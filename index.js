@@ -167,17 +167,14 @@ const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 (async () => {
 	try {
 		console.log('Started refreshing application (/) commands.');
-
-		await rest.put(
-			Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILDID),
-			{ body: commands.map(command => { return command.data }) },
-		);
-
+		let commandsType = process.env.NODE_ENV === "production" ? Routes.applicationCommands(process.env.CLIENT_ID) : Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILDID)
+		await rest.put(commandsType, {body: commands.map(command => { return command.data })})
 		console.log('Successfully reloaded application (/) commands.');
-	} catch (error) {
+	} 
+	catch (error) {
 		console.error(error);
 	}
-})();
+})()
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
