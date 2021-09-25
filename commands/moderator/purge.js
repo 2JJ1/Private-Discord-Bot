@@ -7,6 +7,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("purge")
 		.setDescription('Removes a selected messages from this text channel.')
+		.setDefaultPermission(false)
 		.addNumberOption(option =>
 			option
 				.setName("count")
@@ -27,6 +28,18 @@ module.exports = {
 				.setName("regex")
 				.setDescription("(Advanced) Deletes messages only containing this regex pattern.")
 		),
+	permissions: [
+		{
+			roleName: 'admin',
+			type: 'ROLE',
+			permission: true,
+		},
+		{
+			roleName: 'moderator',
+			type: 'ROLE',
+			permission: true,
+		},
+	],
 	async execute(interaction){
 		try{
 			//Check if guild settings allow this command

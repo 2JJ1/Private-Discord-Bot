@@ -5,7 +5,20 @@ const settings = require("../../settings")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("reboot")
-        .setDescription('Attempts to turn the bot on and off. Like for your PC or modem, this may fix some issues.'),
+        .setDescription('Attempts to turn the bot on and off. Like for your PC or modem, this may fix some issues.')
+        .setDefaultPermission(false),
+    permissions: [
+        {
+            roleName: 'admin',
+            type: 'ROLE',
+            permission: true,
+        },
+        {
+            roleName: 'moderator',
+            type: 'ROLE',
+            permission: true,
+        },
+    ],
     async execute(interaction){
         try{
             //Check if guild settings allow this command

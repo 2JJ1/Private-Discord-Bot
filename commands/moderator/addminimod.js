@@ -4,7 +4,7 @@ const settings = require("../../settings")
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("addminimoderator")
+        .setName("addminimod")
         .setDescription("Adds mini-moderator permissions to the selected member.")
         .setDefaultPermission(false)
         .addUserOption(option => 
@@ -15,7 +15,12 @@ module.exports = {
         ),
     permissions: [
         {
-            id: '753468752946921503',
+            roleName: 'admin',
+            type: 'ROLE',
+            permission: true,
+        },
+        {
+            roleName: 'moderator',
             type: 'ROLE',
             permission: true,
         },

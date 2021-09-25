@@ -7,6 +7,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("mute")
 		.setDescription('Removes text and voice permissions from the selected member.')
+		.setDefaultPermission(false)
 		.addUserOption(option => 
 			option
 				.setName("member")
@@ -29,6 +30,18 @@ module.exports = {
 				.setName("hours")
 				.setDescription("How many hours do you want them to be muted?")	
 		),
+	permissions: [
+		{
+			roleName: 'admin',
+			type: 'ROLE',
+			permission: true,
+		},
+		{
+			roleName: 'moderator',
+			type: 'ROLE',
+			permission: true,
+		},
+	],
 	async execute(interaction){
 		try{
 			//Check if this module is enabled

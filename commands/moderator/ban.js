@@ -8,6 +8,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("ban")
 		.setDescription("Bans the selected user from this guild.")
+		.setDefaultPermission(false)
 		.addUserOption(option => 
 			option
 				.setName("user")
@@ -20,6 +21,18 @@ module.exports = {
 				.setDescription("Why do you want to ban this user?")
 				.setRequired(true)
 		),
+	permissions: [
+		{
+			roleName: 'admin',
+			type: 'ROLE',
+			permission: true,
+		},
+		{
+			roleName: 'moderator',
+			type: 'ROLE',
+			permission: true,
+		},
+	],
 	async execute(interaction){
 		try{
 			//Check if settings allow this command

@@ -6,12 +6,20 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("removemod")
 		.setDescription('Removes moderator permissions from the selected member.')
+		.setDefaultPermission(false)
 		.addUserOption(option => 
 			option
 				.setName("member")
 				.setDescription("The member who should lose their moderator permissions.")
 				.setRequired(true)
 		),
+	permissions: [
+		{
+			roleName: 'admin',
+			type: 'ROLE',
+			permission: true,
+		},
+	],
 	async execute(interaction){
 		try{
 			//Check if settings allow this command

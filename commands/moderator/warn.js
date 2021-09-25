@@ -6,6 +6,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("warn")
 		.setDescription('Adds the "warned" role to the selected member.')
+		.setDefaultPermission(false)
 		.addUserOption(option => 
 			option
 				.setName("member")
@@ -17,6 +18,18 @@ module.exports = {
                 .setName("reason")
                 .setDescription("Leaves a note in audit logs for why you're enabling slowmode.")    
         ),
+	permissions: [
+		{
+			roleName: 'admin',
+			type: 'ROLE',
+			permission: true,
+		},
+		{
+			roleName: 'moderator',
+			type: 'ROLE',
+			permission: true,
+		},
+	],
 	async execute(interaction){
 		try{
 			//Check if this module is enabled

@@ -7,7 +7,15 @@ const settings = require("../../settings")
 module.exports = {
     data: new SlashCommandBuilder()
 		.setName("clearmutes")
-		.setDescription('Unmutes all members of this guild.'),
+		.setDescription('Unmutes all members of this guild.')
+        .setDefaultPermission(false),
+    permissions: [
+        {
+            roleName: 'admin',
+            type: 'ROLE',
+            permission: true,
+        },
+    ],
     async execute(interaction){
         try{
             //Check if settings allow this command

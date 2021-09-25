@@ -5,7 +5,15 @@ const settings = require("../../settings")
 module.exports = {
     data: new SlashCommandBuilder()
 		.setName("clearwarns")
-		.setDescription('Removes the "warned" role from all members of this guild.'),
+		.setDescription('Removes the "warned" role from all members of this guild.')
+        .setDefaultPermission(false),
+    permissions: [
+        {
+            roleName: 'admin',
+            type: 'ROLE',
+            permission: true,
+        },
+    ],
     async execute(interaction){
         try{
             //Check if settings allow this command

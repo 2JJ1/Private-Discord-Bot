@@ -5,7 +5,15 @@ const settings = require("../../settings")
 module.exports = {
     data: new SlashCommandBuilder()
 		.setName("clearbans")
-		.setDescription('Unbans all banned users.'),
+		.setDescription('Unbans all banned users.')
+        .setDefaultPermission(false),
+    permissions: [
+        {
+            roleName: 'admin',
+            type: 'ROLE',
+            permission: true,
+        },
+    ],
     async execute(interaction){
         try{
             //Check if settings allow this command

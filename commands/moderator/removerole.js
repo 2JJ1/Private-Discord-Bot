@@ -6,6 +6,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("removerole")
 		.setDescription('Removes the selected role from the selected member.')
+		.setDefaultPermission(false)
 		.addUserOption(option => 
 			option
 				.setName("member")
@@ -18,6 +19,18 @@ module.exports = {
 				.setDescription("The role which you want to add to the target member.")
 				.setRequired(true)
 		),
+	permissions: [
+		{
+			roleName: 'admin',
+			type: 'ROLE',
+			permission: true,
+		},
+		{
+			roleName: 'moderator',
+			type: 'ROLE',
+			permission: true,
+		},
+	],
 	async execute(interaction){
 		try{
 			//Check if this module is enabled

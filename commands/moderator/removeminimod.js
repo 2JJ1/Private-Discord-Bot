@@ -4,14 +4,27 @@ const settings = require("../../settings")
 
 module.exports = {
 	data: new SlashCommandBuilder()
-        .setName("removeminimoderator")
+        .setName("removeminimod")
         .setDescription("Removes mini-moderator permissions from the selected member.")
+		.setDefaultPermission(false)
         .addUserOption(option => 
             option
                 .setName('user')
                 .setDescription('The mini-moderator that you would like to remove.')
                 .setRequired(true)
         ),
+	permissions: [
+		{
+			roleName: 'admin',
+			type: 'ROLE',
+			permission: true,
+		},
+		{
+			roleName: 'moderator',
+			type: 'ROLE',
+			permission: true,
+		},
+	],
 	async execute(interaction){
 		try{
 			//Check if settings allow this command
