@@ -28,7 +28,7 @@ module.exports = {
 
 			//Must be a mod to continue
 			let isMod = await permissions.IsModerator(interaction.member)
-			if(isMod !== true)  throw {safe: 'You are not a moderator'};
+			if(isMod !== true)  throw 'You are not a moderator'
 
 			//Who to ban
 			let targetUser = interaction.options.getUser("user", true)
