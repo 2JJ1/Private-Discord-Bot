@@ -94,11 +94,11 @@ client.on('ready', async () => {
 
 		for(const [id, registeredCommand] of registeredCommands){
 			let permissions = commands.get(registeredCommand.name).permissions
-			if(!permissions) return
+			if(!permissions) continue
+			console.log("working!", registeredCommand.name)
 			for(let i=0; i<permissions.length; i++){
-				permissions[i].id = (await guild.roles.fetch()).find(role => role.name.toLowerCase() === permissions[i].roleName)
+				permissions[i].id = (await guild.roles.fetch()).find(role => role.name.toLowerCase() === permissions[i].roleName).id
 				delete permissions[i].roleName
-				console.log("New id: ", permissions[i].id)
 			}
 			await registeredCommand.permissions.set({permissions})
 		}
