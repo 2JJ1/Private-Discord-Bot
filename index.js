@@ -160,6 +160,7 @@ function traverseCommands(commandsPath){
 traverseCommands("./commands")
 traverseCommands("./commands/funcommands")
 traverseCommands("./commands/moderator")
+traverseCommands("./commands/admin")
 
 const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 

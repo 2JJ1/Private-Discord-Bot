@@ -1,28 +1,40 @@
+var {SlashCommandBuilder} = require('@discordjs/builders')
 const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
-module.exports = async function(msg){
-    //Check if settings allow this command
-    if(settings.adminCommands.enabled === false) throw "The admin commands module is disabled"
-	if(settings.adminCommands.clearBans === false) throw "The clearBans command module is disabled"
+module.exports = {
+    data: new SlashCommandBuilder()
+		.setName("clearbans")
+		.setDescription('Unbans all banned users.'),
+    async execute(interaction){
+        try{
+            //Check if settings allow this command
+            if(settings.adminCommands.enabled === false) throw "The admin commands module is disabled"
+            if(settings.adminCommands.clearBans === false) throw "The clearBans command module is disabled"
 
-    //The author must be an admin
-    if(!(await permissions.IsAdmin(msg.member))) throw "You must be an admin to use this"
+            //The author must be an admin
+            if(!(await permissions.IsAdmin(interaction.member))) throw "You must be an admin to use this"
 
-    //Fetch guild members with mute role
-    var members = await msg.guild.bans.fetch()
-    
-    //Go through each guild member with the mute role and remove their role
-    if(members.size > 0){
-        msg.channel.send(`Removing ${members.size} ban${members.size > 1 ? "s" : ""}`);
-        members = [...members.values()]
-        for(var i=0; i<members.length; i++){
-            await msg.guild.members.unban(members[i].user.id)
-            .catch((err) => {
-                msg.channel.send(`Failed to unban <@${members[i].user.id}>`)
-                console.log(err)
-            })
-        };
-    } 
-    else msg.channel.send(`Seems like no one is banned`);
+            //Fetch guild members with mute role
+            var members = await interaction.guild.bans.fetch()
+            
+            //Go through each guild member with the mute role and remove their role
+            if(members.size > 0){
+                interaction.reply(`Removing ${members.size} ban${members.size > 1 ? "s" : ""}`);
+                members = [...members.values()]
+                for(var i=0; i<members.length; i++){
+                    await interaction.guild.members.unban(members[i].user.id)
+                    .catch((err) => {
+                        interaction.channel.send(`Failed to unban <@${members[i].user.id}>`)
+                        console.log(err)
+                    })
+                };
+            } 
+            else interaction.reply(`Seems like no one is banned`);
+        }
+        catch(e){
+            if(typeof e === "string") interaction.reply(`Error: ${e}`)
+            else console.error(e)
+        }
+    }
 }

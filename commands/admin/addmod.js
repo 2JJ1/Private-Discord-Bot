@@ -1,31 +1,49 @@
+var {SlashCommandBuilder} = require('@discordjs/builders')
 const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
-module.exports = async function(msg){
-    //Check if settings allow this command
-    if(settings.adminCommands.enabled === false) throw "The admin commands module is disabled"
-	if(settings.adminCommands.addmod === false) throw "The addmod command module is disabled"
+module.exports = {
+    data: new SlashCommandBuilder()
+		.setName("addmod")
+		.setDescription('Gives the selected member moderator permissions.')
+		.addUserOption(option => 
+			option
+				.setName("member")
+				.setDescription("The member to receive moderator permissions.")
+				.setRequired(true)
+		),
+    async execute(interaction){
+        try{
+            //Check if settings allow this command
+            if(settings.adminCommands.enabled === false) throw "The admin commands module is disabled"
+            if(settings.adminCommands.addmod === false) throw "The addmod command module is disabled"
 
-    //Author must be an admin
-    if(!(await permissions.IsAdmin(msg.member))) throw "You are not an admin"
+            //Requester must be an admin
+            if(!(await permissions.IsAdmin(interaction.member))) throw "You are not an admin"
 
-    //There must be a mention
-    var firstMention = msg.mentions.members.first()
-    if(!firstMention) throw "You must mention someone"
+            //The member who should become a moderator
+            let targetMember = interaction.options.getMember("member", true)
 
-    if(await permissions.IsModerator(firstMention)) throw "That member is already a moderator"
+            //Check if they're already a moderator
+            if(await permissions.IsModerator(targetMember)) throw "That member is already a moderator"
 
-    //Fetch the "moderator" role
-    var modRole = msg.guild.roles.cache.find(role => role.name === "moderator")
+            //Fetch the "moderator" role
+            var modRole = interaction.guild.roles.cache.find(role => role.name === "moderator")
 
-    //Removes mini-moderator role if they have it
-	if(await permissions.IsMiniModerator(firstMention)){
-        var role = msg.guild.roles.cache.find(role => role.name.toLowerCase() === "mini-moderator")
-        await firstMention.roles.remove(role)
-        msg.channel.send(`<@${firstMention.id}> is no longer a mini-moderator`);
+            //Removes mini-moderator role if they have it
+            if(await permissions.IsMiniModerator(targetMember)){
+                var role = interaction.guild.roles.cache.find(role => role.name.toLowerCase() === "mini-moderator")
+                await targetMember.roles.remove(role)
+                interaction.channel.send(`<@${targetMember.id}> is no longer a mini-moderator`);
+            }
+            
+            //Adds moderator role to mentioned user
+            await targetMember.roles.add(modRole)
+            interaction.reply(`<@${targetMember.id}> is now a moderator`);
+        }
+        catch(e){
+            if(typeof e === "string") interaction.reply(`Error: ${e}`)
+            else console.error(e)
+        }
     }
-    
-    //Adds moderator role to mentioned user
-    await firstMention.roles.add(modRole)
-    msg.channel.send(`<@${firstMention.id}> is now a moderator`);
 }
