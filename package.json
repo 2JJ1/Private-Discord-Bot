@@ -1,6 +1,6 @@
 {
   "name": "private-discord-bot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Discord bot designed for use in a single server. No database software required! Just download the project, setup the .env and settings file, then run index.js. This was designed for use with in only one guild.",
   "main": "index.js",
   "dependencies": {
