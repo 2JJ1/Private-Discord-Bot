@@ -5,7 +5,18 @@ const settings = require("../../settings")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("slowmode")
-        .setDescription('Slows down the rate of messages members can send in this text channel.'),
+        .setDescription('Slows down the rate of messages members can send in this text channel.')
+        .addNumberOption(option => 
+            option
+                .setName("seconds")
+                .setDescription(`Length of time members must wait between sending each message. Must be between 0-${settings.modCommands.maxSlowMode} seconds.`)
+                .setRequired(true)
+        )
+        .addStringOption(option =>
+            option
+                .setName("reason")
+                .setDescription("Leaves a note in audit logs for why you're enabling slowmode.")    
+        ),
     async execute(interaction){
         try{
             //Check if this module is enabled
@@ -17,12 +28,14 @@ module.exports = {
             if(!isMod) throw "You can't execute that command"
 
             //To get the time
-            var time = interaction.content.substring(1).toLowerCase().split(" ")[1]
+            var time = interaction.options.getNumber("seconds", true)
             //Sanitize the time. Must be a number and shorter than the max time
             if(!/^[0-9]+$/.test(time) || time > settings.modCommands.maxSlowMode) throw `Please pick a number of seconds up to ${settings.modCommands.maxSlowMode}.`
 
+            var reason = interaction.options.getString("reason") || "Unspecified."
+
             //Sets the slowmode
-            interaction.channel.setRateLimitPerUser(time, `SLOWMODE time set by <@${interaction.author.id}>`)
+            interaction.channel.setRateLimitPerUser(time, `By ${interaction.user.tag}(${interaction.user.id}). Reason: ${reason}.`)
 
             //Report success
             interaction.reply(`Set SLOWMODE for this text channel to ${time} seconds.`)

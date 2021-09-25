@@ -5,7 +5,7 @@ const settings = require("../../settings")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("reboot")
-        .setDescription('Attempts to restart the bot. Useful for if the bot freezes up.'),
+        .setDescription('Attempts to turn the bot on and off. Like for your PC or modem, this may fix some issues.'),
     async execute(interaction){
         try{
             //Check if guild settings allow this command
@@ -17,7 +17,7 @@ module.exports = {
             if(isMod !== true)  throw 'You are not a moderator'
             
             //Won't be able to respond after killing, so confirm prior
-            await interaction.react("✅")
+            await interaction.reply("Attempting reboot...")
 
             //Kill the process assuming the a process manager will reboot it
             process.exit(1);
