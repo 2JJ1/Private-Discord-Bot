@@ -95,7 +95,6 @@ client.on('ready', async () => {
 		for(const [id, registeredCommand] of registeredCommands){
 			let permissions = commands.get(registeredCommand.name).permissions
 			if(!permissions) continue
-			console.log("working!", registeredCommand.name)
 			for(let i=0; i<permissions.length; i++){
 				permissions[i].id = (await guild.roles.fetch()).find(role => role.name.toLowerCase() === permissions[i].roleName).id
 				delete permissions[i].roleName
