@@ -11,8 +11,13 @@ module.exports = {
 				.setName("member")
 				.setDescription("The member that you want to warn.")
 				.setRequired(true)
-		),
-	async function(interaction){
+		)
+		.addStringOption(option =>
+            option
+                .setName("reason")
+                .setDescription("Leaves a note in audit logs for why you're enabling slowmode.")    
+        ),
+	async execute(interaction){
 		try{
 			//Check if this module is enabled
 			if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
@@ -24,28 +29,17 @@ module.exports = {
 			if(!isMod && !isMiniMod) throw "You can't execute that command"
 
 			//Determine who to warn
-			let target = interaction.mentions.members.first()
-			if(!target) throw 'You must mention someone in the guild'
-			let targetid = target.id;
+			let target = interaction.options.getMember("member", true)
 								
 			//You can only warn non-moderators
 			let targetIsMod = await permissions.IsModerator(target)
 			if(targetIsMod) throw "You can't warn another mod"
-							
-			let warningMessage = 'A moderator has marked you as warned. Please be mindful of the rules! Acting against them or participating as a disturbance can get you muted. In extreme conditions, you can even be banned.'
 
 			//Why they are being warned
-			var reason
-			//If specified through an option
-			if(interaction.opts.reason) reason = interaction.opts.reason
-			//Otherwise, assume anything after the mention is the reason unless any other option is specified
-			else if(Object.keys(interaction.opts).length <= 0){
-				let match = interaction.content.match(/<@!?(\d{17,19})>/)
-				if(match) reason = interaction.content.substr(match.index + match[0].length + 1)
-			}
-			reason = (reason.length > 2000 ? reason.substr(0,2000) + "..." : reason) || "Not specified"
+			var reason = interaction.options.getString("reason") || "Unspecified"
+			if(reason.length > 1500) throw "Your reason is too long."
 
-			warningMessage += `\n\nMessage from moderator: ${reason}`
+			let warningMessage = `<@${interaction.user.id}> has marked you as warned. Reason: ${reason}. Please be mindful of the rules! Acting against them or participating as a disturbance can get you muted. In extreme conditions, you can even be banned.`
 
 			//Fetch the "warned" role's id
 			var warnRole = interaction.guild.roles.cache.find(role => role.name.toLowerCase() === "warned")
@@ -67,12 +61,12 @@ module.exports = {
 			}
 
 			//Apply the role
-			await target.roles.add(warnRoleId, `Warned by <@${interaction.author.id}> - (${reason})`)
+			await target.roles.add(warnRoleId, `Warned by ${interaction.user.tag}(${interaction.user.id}). Reason: ${reason}.`)
 
 			//Send the warned user their warning
-			target.send(warningMessage)
-			.then(() => interaction.channel.send(`<@${targetid}> Has been warned via DM`))
-			.catch(() => interaction.channel.send('Failed to DM that user, but they can refer to your mention.'))
+			await target.send(warningMessage)
+			.then(() => interaction.reply(`<@${target.id}> Has been warned via DM`))
+			.catch(() => interaction.reply('Failed to DM that user, but they can refer to your mention.'))
 		}
 		catch(e){
 			if(typeof e === "string") interaction.reply(`Error: ${e}`)

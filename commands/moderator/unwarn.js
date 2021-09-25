@@ -12,7 +12,7 @@ module.exports = {
 				.setDescription("The member that you want to unwarn.")
 				.setRequired(true)
 		),
-	async function(interaction){
+	async execute(interaction){
 		try{
 			//Check if this module is enabled
 			if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
@@ -24,9 +24,7 @@ module.exports = {
 			if(!isMod && !isMiniMod) throw "You can't execute that command"
 
 			//Determine who to unwarn
-			let target = interaction.mentions.members.first()
-			if(!target) throw 'You must mention someone in the guild'
-			let targetid = target.id;
+			let target = interaction.options.getMember("member", true)
 
 			//Fetch the warned role
 			var warnRole = interaction.guild.roles.cache.find(role => role.name.toLowerCase() === "warned")
@@ -35,7 +33,7 @@ module.exports = {
 			//Removes the role
 			await target.roles.remove(warnRole)
 			
-			interaction.channel.send("Removed warned role from <@" + targetid + ">");
+			interaction.reply("Removed warned role from <@" + target.id + ">")
 		}
 		catch(e){
 			if(typeof e === "string") interaction.reply(`Error: ${e}`)
