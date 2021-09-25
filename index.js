@@ -61,6 +61,7 @@ client.on('ready', async () => {
 	settings.trackInvites && client.guilds.cache.forEach(async g => await g.invites.fetch())
 
 	/** Commands Handler **/
+	//Get list of commands
 	function traverseCommands(commandsPath){
 		const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 		for (const file of commandFiles) {
@@ -73,26 +74,37 @@ client.on('ready', async () => {
 	traverseCommands("./commands/moderator")
 	traverseCommands("./commands/admin")
 
+	//Setup
 	const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 
 	//Registers commands
-	try {
-		console.log('Started refreshing application (/) commands.');
-		let commandsType = Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILDID)
-		await rest.put(commandsType, {body: commands.map(command => { return command.data })})
-		console.log('Successfully reloaded application (/) commands.');
-	} 
-	catch (error) {
-		console.error(error);
-	}
+	console.log('Started refreshing application (/) commands.');
+	let guilds = client.guilds.cache
+	for(const [id, guild] of guilds){
+		try{
+			let commandsType = Routes.applicationGuildCommands(process.env.CLIENT_ID, guild.id)
+			await rest.put(commandsType, {body: commands.map(command => { return command.data })})
+		}
+		catch(e) {
+			console.error({e})
+		}
 
-	//Sets permissions as necessary for each command
-	let registeredCommands = await (await client.guilds.fetch(process.env.GUILDID)).commands.fetch()
-	registeredCommands.forEach(async (registeredCommand) => {
-		let permissions = commands.get(registeredCommand.name).permissions
-		if(!permissions) return
-		await registeredCommand.permissions.set({permissions})
-	})
+		//Sets permissions as necessary for each command
+		let registeredCommands = await guild.commands.fetch()
+
+		for(const [id, registeredCommand] of registeredCommands){
+			let permissions = commands.get(registeredCommand.name).permissions
+			if(!permissions) return
+			for(let i=0; i<permissions.length; i++){
+				permissions[i].id = (await guild.roles.fetch()).find(role => role.name.toLowerCase() === permissions[i].roleName)
+				delete permissions[i].roleName
+				console.log("New id: ", permissions[i].id)
+			}
+			await registeredCommand.permissions.set({permissions})
+		}
+	}
+	console.log('Successfully reloaded application (/) commands.');
+
 	/** End Commands Handler **/
 });
 
