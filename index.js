@@ -21,6 +21,9 @@ require('./wrappers/permissions')
 // A pretty useful method to create a delay without blocking the whole script.
 const wait = require('util').promisify(setTimeout);
 
+//Variables for use later
+const commands = new Collection();
+
 client.on('ready', async () => {
 	// "ready" isn't really ready. We need to wait a spell.
 	wait(1000);
@@ -56,6 +59,41 @@ client.on('ready', async () => {
 
 	// Load all invites for all guilds to initialize caches for first comparison
 	settings.trackInvites && client.guilds.cache.forEach(async g => await g.invites.fetch())
+
+	/** Commands Handler **/
+	function traverseCommands(commandsPath){
+		const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+		for (const file of commandFiles) {
+			const command = require(`${commandsPath}/${file}`);
+			commands.set(command.data.name, command);
+		}
+	}
+	traverseCommands("./commands")
+	traverseCommands("./commands/funcommands")
+	traverseCommands("./commands/moderator")
+	traverseCommands("./commands/admin")
+
+	const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
+
+	//Registers commands
+	try {
+		console.log('Started refreshing application (/) commands.');
+		let commandsType = Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILDID)
+		await rest.put(commandsType, {body: commands.map(command => { return command.data })})
+		console.log('Successfully reloaded application (/) commands.');
+	} 
+	catch (error) {
+		console.error(error);
+	}
+
+	//Sets permissions as necessary for each command
+	let registeredCommands = await (await client.guilds.fetch(process.env.GUILDID)).commands.fetch()
+	registeredCommands.forEach(async (registeredCommand) => {
+		let permissions = commands.get(registeredCommand.name).permissions
+		if(!permissions) return
+		await registeredCommand.permissions.set({permissions})
+	})
+	/** End Commands Handler **/
 });
 
 //Called when someone joins the server
@@ -147,35 +185,6 @@ client.on("guildMemberAdd", async (member) => {
 	}
 });
 
-
-/** Command Handler */
-const commands = new Collection();
-function traverseCommands(commandsPath){
-	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-	for (const file of commandFiles) {
-		const command = require(`${commandsPath}/${file}`);
-		commands.set(command.data.name, command);
-	}
-}
-traverseCommands("./commands")
-traverseCommands("./commands/funcommands")
-traverseCommands("./commands/moderator")
-traverseCommands("./commands/admin")
-
-const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
-
-(async () => {
-	try {
-		console.log('Started refreshing application (/) commands.');
-		let commandsType = process.env.NODE_ENV === "production" ? Routes.applicationCommands(process.env.CLIENT_ID) : Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILDID)
-		await rest.put(commandsType, {body: commands.map(command => { return command.data })})
-		console.log('Successfully reloaded application (/) commands.');
-	} 
-	catch (error) {
-		console.error(error);
-	}
-})()
-
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
@@ -183,8 +192,6 @@ client.on('interactionCreate', async interaction => {
 	let command = commands.get(commandName)
 	await command.execute(interaction)
 });
-
-/** End Command Handler */
 
 client.on('messageCreate', async msg => {
 	//Don't handle messages from bots

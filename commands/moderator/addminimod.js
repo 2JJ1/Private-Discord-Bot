@@ -6,12 +6,20 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("addminimoderator")
         .setDescription("Adds mini-moderator permissions to the selected member.")
+        .setDefaultPermission(false)
         .addUserOption(option => 
             option
                 .setName("user")
                 .setDescription("The user that you'd like to be a mini-moderator")
                 .setRequired(true)
         ),
+    permissions: [
+        {
+            id: '753468752946921503',
+            type: 'ROLE',
+            permission: true,
+        },
+    ],
     async execute(interaction){
         try{
             //Check if settings allow this command
