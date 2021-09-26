@@ -3,6 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+	enabled: settings.modCommands.unwarn === true,
 	data: new SlashCommandBuilder()
 		.setName("unwarn")
 		.setDescription('Removes the "warned" role from the selected member.')
@@ -27,10 +28,6 @@ module.exports = {
 	],
 	async execute(interaction){
 		try{
-			//Check if this module is enabled
-			if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
-			if(settings.modCommands.unwarn === false) throw "The unwarn command module is disabled"
-
 			//Only admins, moderators, and mini-moderators can use this command
 			let isMod = await permissions.IsModerator(interaction.member)
 			let isMiniMod = await permissions.IsMiniModerator(interaction.member)

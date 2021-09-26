@@ -5,6 +5,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+	enabled: settings.modCommands.ban === true,
 	data: new SlashCommandBuilder()
 		.setName("ban")
 		.setDescription("Bans the selected user from this guild.")
@@ -35,10 +36,6 @@ module.exports = {
 	],
 	async execute(interaction){
 		try{
-			//Check if settings allow this command
-			if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
-			if(settings.modCommands.ban === false) throw "The ban command module is disabled"
-
 			//Must be a mod to continue
 			let isMod = await permissions.IsModerator(interaction.member)
 			if(isMod !== true)  throw 'You are not a moderator'

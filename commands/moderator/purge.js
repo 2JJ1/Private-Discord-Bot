@@ -4,6 +4,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+	enabled: settings.modCommands.purge === true,
 	data: new SlashCommandBuilder()
 		.setName("purge")
 		.setDescription('Removes a selected messages from this text channel.')
@@ -42,10 +43,6 @@ module.exports = {
 	],
 	async execute(interaction){
 		try{
-			//Check if guild settings allow this command
-			if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
-			if(settings.modCommands.purge === false) throw "The purge command module is disabled"
-
 			//Only moderators can purge
 			let hasPerm = await permissions.IsModerator(interaction.member)
 			if(hasPerm !== true) throw 'You can\'t execute that command'

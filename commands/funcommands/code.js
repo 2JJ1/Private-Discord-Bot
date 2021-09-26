@@ -7,6 +7,7 @@ const settings = require("../../settings")
  * Run code in a sandbox using WandBox's online API
  */
 module.exports = {
+    enabled: settings.funCommands.compile === true,
     data: new SlashCommandBuilder()
         .setName("code")
         .setDescription("Executes the selected code.")
@@ -38,10 +39,6 @@ module.exports = {
         ),
     async execute(interaction){
         try{
-            //Check if settings allow this command
-            if(settings.funCommands.enabled === false) throw "The funCommands module is disabled"
-            if(settings.funCommands.compile === false) throw "The compile command module is disabled"
-
             //Only 12 compiles can be called per 5 seconds
             await throttler(`${interaction.guild.id}-code`, {
                 maxCalls: 12,

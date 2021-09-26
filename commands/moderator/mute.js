@@ -4,6 +4,7 @@ const settings = require("../../settings")
 const mutemember = require('../../my_modules/mutemember')
 
 module.exports = {
+	enabled: settings.modCommands.mute === true,
 	data: new SlashCommandBuilder()
 		.setName("mute")
 		.setDescription('Removes text and voice permissions from the selected member.')
@@ -44,10 +45,6 @@ module.exports = {
 	],
 	async execute(interaction){
 		try{
-			//Check if this module is enabled
-			if(settings.modCommands.enabled !== true) throw "The moderator commands module is disabled"
-			if(settings.modCommands.mute !== true) throw "The mute command module is disabled"
-
 			//Only admins, moderators, and mini-moderators can use this command
 			let isMod = await permissions.IsModerator(interaction.member)
 			let isMiniMod = await permissions.IsMiniModerator(interaction.member)

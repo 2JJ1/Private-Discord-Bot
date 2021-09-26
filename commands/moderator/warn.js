@@ -3,6 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+	enabled: settings.modCommands.warn === true,
 	data: new SlashCommandBuilder()
 		.setName("warn")
 		.setDescription('Adds the "warned" role to the selected member.')
@@ -32,10 +33,6 @@ module.exports = {
 	],
 	async execute(interaction){
 		try{
-			//Check if this module is enabled
-			if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
-			if(settings.modCommands.warn === false) throw "The warn command module is disabled"
-
 			//Only admins, moderators, and mini-moderators can use this command
 			let isMod = await permissions.IsModerator(interaction.member)
 			let isMiniMod = await permissions.IsMiniModerator(interaction.member)

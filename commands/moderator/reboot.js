@@ -3,6 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+    enabled: settings.modCommands.reboot === true,
     data: new SlashCommandBuilder()
         .setName("reboot")
         .setDescription('Attempts to turn the bot on and off. Like for your PC or modem, this may fix some issues.')
@@ -21,10 +22,6 @@ module.exports = {
     ],
     async execute(interaction){
         try{
-            //Check if guild settings allow this command
-            if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
-            if(settings.modCommands.reboot === false) throw "The reboot command module is disabled"
-            
             //Must be a mod to continue
             let isMod = await permissions.IsModerator(interaction.member)
             if(isMod !== true)  throw 'You are not a moderator'

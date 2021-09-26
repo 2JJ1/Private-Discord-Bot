@@ -5,6 +5,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+    enabled: settings.adminCommands.clearMutes === true,
     data: new SlashCommandBuilder()
 		.setName("clearmutes")
 		.setDescription('Unmutes all members of this guild.')
@@ -18,10 +19,6 @@ module.exports = {
     ],
     async execute(interaction){
         try{
-            //Check if settings allow this command
-            if(settings.adminCommands.enabled === false) throw "The admin commands module is disabled"
-            if(settings.adminCommands.clearMutes === false) throw "The clearMutes command module is disabled"
-
             //The author must be an admin
             if(!(await permissions.IsAdmin(interaction.member))) throw "You must be an admin to use this"
 

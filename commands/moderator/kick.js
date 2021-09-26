@@ -5,6 +5,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+	enabled: settings.modCommands.kick === true,
 	data: new SlashCommandBuilder()
 		.setName("kick")
 		.setDescription('Kicks the selected member from this guild.')
@@ -35,10 +36,6 @@ module.exports = {
 	],
 	async execute(interaction){
 		try{
-			//Check if settings allow this command
-			if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
-			if(settings.modCommands.kick === false) throw "The kick command module is disabled"
-
 			//Only mods can kick
 			let isMod = await permissions.IsModerator(interaction.member)
 			if(isMod !== true)  throw 'You are not a moderator'

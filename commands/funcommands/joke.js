@@ -6,15 +6,12 @@ const settings = require("../../settings")
 const set = new Set();
 
 module.exports = {
+    enabled: settings.funCommands.joke === true,
     data: new SlashCommandBuilder()
         .setName("joke")
         .setDescription("Replies with a random joke."),
     async execute(interaction){
         try{
-            //Check if settings allow this command
-            if(settings.funCommands.enabled === false) throw "The funCommands module is disabled"
-            if(settings.funCommands.joke === false) throw "The joke command module is disabled"
-
             let res = set.joke({type: "general"});
             await interaction.reply(`${res.setup}`)
             setTimeout(function(){

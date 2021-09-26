@@ -3,6 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+    enabled: settings.modCommands.slowMode === true,
     data: new SlashCommandBuilder()
         .setName("slowmode")
         .setDescription('Slows down the rate of messages members can send in this text channel.')
@@ -32,10 +33,6 @@ module.exports = {
     ],
     async execute(interaction){
         try{
-            //Check if this module is enabled
-            if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
-            if(settings.modCommands.slowMode === false) throw "The warn command module is disabled"
-
             //Only admins and moderators can use this command
             let isMod = await permissions.IsModerator(interaction.member)
             if(!isMod) throw "You can't execute that command"

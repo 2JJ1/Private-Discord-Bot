@@ -3,6 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+	enabled: settings.modCommands.addRoleWhitelist.length > 0,
 	data: new SlashCommandBuilder()
 		.setName("addrole")
 		.setDescription('Adds the selected role to the selected member.')
@@ -33,10 +34,6 @@ module.exports = {
 	],
 	async execute(interaction){
 		try{
-			//Check if this module is enabled
-			if(settings.modCommands.enabled !== true) throw "The moderator commands module is disabled"
-			if(settings.modCommands.addRoleWhitelist.length <= 0) throw "The addrole command module is disabled"
-
 			//Only admins, moderators, and mini-moderators can use this command
 			let isMod = await permissions.IsModerator(interaction.member)
 			let isMiniMod = await permissions.IsMiniModerator(interaction.member)

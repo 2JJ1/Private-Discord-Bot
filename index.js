@@ -61,18 +61,25 @@ client.on('ready', async () => {
 	settings.trackInvites && client.guilds.cache.forEach(async g => await g.invites.fetch())
 
 	/** Commands Handler **/
-	//Get list of commands
+	//Compiles list of commands
 	function traverseCommands(commandsPath){
 		const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 		for (const file of commandFiles) {
 			const command = require(`${commandsPath}/${file}`);
+
+			//Some commands have an individual enabled setting. If false, don't register the command anywhere.
+			if("enabled" in command && command.enabled !== true) continue
+
+			//Add command to list
 			commands.set(command.data.name, command);
 		}
 	}
 	traverseCommands("./commands")
-	traverseCommands("./commands/funcommands")
-	traverseCommands("./commands/moderator")
-	traverseCommands("./commands/admin")
+	if(settings.funCommands.enabled) traverseCommands("./commands/funcommands")
+	if(settings.modCommands.enabled) traverseCommands("./commands/moderator")
+	if(settings.adminCommands.enabled) traverseCommands("./commands/admin")
+
+	console.log(commands.size)
 
 	//Setup
 	const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);

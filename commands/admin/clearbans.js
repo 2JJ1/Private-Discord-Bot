@@ -3,6 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+    enabled: settings.adminCommands.clearBans === true,
     data: new SlashCommandBuilder()
 		.setName("clearbans")
 		.setDescription('Unbans all banned users.')
@@ -16,10 +17,6 @@ module.exports = {
     ],
     async execute(interaction){
         try{
-            //Check if settings allow this command
-            if(settings.adminCommands.enabled === false) throw "The admin commands module is disabled"
-            if(settings.adminCommands.clearBans === false) throw "The clearBans command module is disabled"
-
             //The author must be an admin
             if(!(await permissions.IsAdmin(interaction.member))) throw "You must be an admin to use this"
 

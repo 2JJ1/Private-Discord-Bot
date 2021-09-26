@@ -3,6 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+    enabled: settings.adminCommands.addmod === true,
     data: new SlashCommandBuilder()
 		.setName("addmod")
 		.setDescription('Gives the selected member moderator permissions.')
@@ -22,10 +23,6 @@ module.exports = {
     ],
     async execute(interaction){
         try{
-            //Check if settings allow this command
-            if(settings.adminCommands.enabled === false) throw "The admin commands module is disabled"
-            if(settings.adminCommands.addmod === false) throw "The addmod command module is disabled"
-
             //Requester must be an admin
             if(!(await permissions.IsAdmin(interaction.member))) throw "You are not an admin"
 

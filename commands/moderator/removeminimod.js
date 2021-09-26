@@ -3,6 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
+	enabled: settings.modCommands.removeMinimod === true,
 	data: new SlashCommandBuilder()
         .setName("removeminimod")
         .setDescription("Removes mini-moderator permissions from the selected member.")
@@ -27,10 +28,6 @@ module.exports = {
 	],
 	async execute(interaction){
 		try{
-			//Check if settings allow this command
-			if(settings.modCommands.enabled === false) throw "The modCommands module is disabled"
-			if(settings.modCommands.removeMinimod === false) throw "The removeMinimod command module is disabled"
-
 			//Author must be an moderator
 			if(!(await permissions.IsModerator(interaction.member))) throw "You are not a moderator"
 			
