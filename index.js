@@ -79,8 +79,6 @@ client.on('ready', async () => {
 	if(settings.modCommands.enabled) traverseCommands("./commands/moderator")
 	if(settings.adminCommands.enabled) traverseCommands("./commands/admin")
 
-	console.log(commands.size)
-
 	//Setup
 	const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 
