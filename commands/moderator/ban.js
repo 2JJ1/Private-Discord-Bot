@@ -10,7 +10,7 @@ module.exports = {
 		.setName("ban")
 		.setDescription("Bans the selected user from this guild.")
 		.setDefaultPermission(false)
-		.addMentionableOption(option => 
+		.addUserOption(option => 
 			option
 				.setName("user")
 				.setDescription("The user that you want ban.")
