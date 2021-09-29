@@ -275,7 +275,7 @@ client.on("messageDelete", async msg => {
 	//Don't handle messages from bots
 	if(msg.author.bot) return
 	//Only handle messages in text channels
-	if(msg.channel.type !== "text") return
+	if(msg.channel.type !== "GUILD_TEXT") return
 
 	//Logs only if enabled
 	if(!settings.logMessages) return
@@ -304,7 +304,7 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
 	//Don't handle messages from bots
 	if (oldMsg.author.bot) return
 	//Only handle messages in text channels
-	if(oldMsg.channel.type !== "text") return
+	if(oldMsg.channel.type !== "GUILD_TEXT") return
 
 	//Logs only if enabled
 	if(!settings.logMessages) return
