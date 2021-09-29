@@ -5,7 +5,7 @@
  */
 module.exports = async function(guild, logContent){
     //Find the logs channel
-	var logChannel = guild.channels.cache.find(channel => channel.name.toLowerCase() === "logs")
+	var logChannel = (await guild.channels.fetch()).find(channel => channel.name.toLowerCase() === "logs")
 	//Create it if it doesn't exist
 	if(!logChannel){
 		logChannel = await guild.channels.create("logs", {

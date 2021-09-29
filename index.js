@@ -281,7 +281,7 @@ client.on("messageDelete", async msg => {
 	if(!settings.logMessages) return
 
 	//Logs the deleted message
-	LogChannel(msg.guild, {embed: {
+	LogChannel(msg.guild, {embeds: [{
 		author: {
 			name: `${msg.author.tag} (${msg.author.id}) - Message Deleted`,
 			icon_url: msg.author.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
@@ -296,7 +296,7 @@ client.on("messageDelete", async msg => {
 				value: `<#${msg.channel.id}>`
 			}
 		]
-	}})
+	}]})
 })
 
 //Emitted when a message is updated
@@ -313,7 +313,7 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
 	if(oldMsg.content === newMsg.content) return
 
 	//Logs the deleted message
-	LogChannel(newMsg.guild, {embed: {
+	LogChannel(newMsg.guild, {embeds: [{
 		author: {
 			name: `${oldMsg.author.tag} (${oldMsg.author.id}) Edited A Message`,
 			icon_url: oldMsg.author.avatarURL() || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png",
@@ -333,7 +333,7 @@ client.on("messageUpdate", async (oldMsg, newMsg) => {
 				value: `[${oldMsg.channel.name}](${oldMsg.url})`,
 			}
 		]
-	}})
+	}]})
 })
 
 client.on("error", e => {
