@@ -14,9 +14,9 @@ module.exports = async function(opts){
     let targetIsMod = await permissions.IsModerator(target)
     if(targetIsMod) throw "You can't mute a moderator!"
 
-    let requester = interaction.user || msg.author
-    let guild = interaction.guild || msg.guild
-    let channel = interaction.channel || msg.channel
+    let requester = (interaction && interaction.user) || (msg && msg.author)
+    let guild = (interaction && interaction.guild) || (msg && msg.guild)
+    let channel = (interaction && interaction.channel) || (msg && msg.channel)
     
     //Don't continue if they're already muted
     if(
@@ -55,10 +55,10 @@ module.exports = async function(opts){
         //Reason character limit. If the reason is empty, use placeholder.
         reason = reason ? (reason.length > 1500 ? reason.substr(0,1500) + "..." : reason) : "Not specified"
     } 
-    else reason = 'Not specified'
+    else reason = reason || 'Not specified'
 
 	//Fetch the "muted" role's id if it exists
-	var mutedRole = target.guild.roles.cache.find(role => role.name.toLowerCase() === "muted")
+	var mutedRole = (await target.guild.roles.fetch()).find(role => role.name.toLowerCase() === "muted")
 	var mutedRoleId
     if(mutedRole) mutedRoleId = mutedRole.id
     //If the muted role doesn't exist, create it
@@ -102,7 +102,7 @@ module.exports = async function(opts){
 
 	//Applies the role
 	await target.roles.add(mutedRoleId, reason)
-    .catch(() => { throw "I can't apply the mute role right now. Please check my permissions or role positioning." })
+    .catch((e) => { throw "I can't apply the mute role right now. Please check my permissions or role positioning." })
 
     //If done by slash command, reply must be sent to complete event
     if((opts.by !== "bot") && interaction) 

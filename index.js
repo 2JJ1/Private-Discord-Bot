@@ -249,13 +249,13 @@ client.on('messageCreate', async msg => {
 
 						//Handle actions
 						if(typeof autoResponse === "object"){
-							if(autoResponse.actions.indexOf("delete") !== -1) msg.delete({reason: "Instructed by the message pattern matcher"}).catch(()=>{})
-							if(autoResponse.actions.indexOf("kick") !== -1) msg.member.kick("Instructed by the message pattern matcher").catch(()=>{})
-							if(autoResponse.actions.indexOf("mute") !== -1) MuteMember({msg, hours: 1, reason: "Instructed by the message pattern matcher", by: "bot"}).catch(()=>{})
+							if(autoResponse.actions.indexOf("delete") !== -1) msg.delete({reason: "Instructed by the message pattern matcher"}).catch((e)=>{console.log(e)})
+							if(autoResponse.actions.indexOf("kick") !== -1) msg.member.kick("Instructed by the message pattern matcher").catch((e)=>{console.log(e)})
+							if(autoResponse.actions.indexOf("mute") !== -1) MuteMember({msg, hours: 1, reason: "Instructed by the message pattern matcher", by: "bot"}).catch((e)=>{console.log(e)})
 						}
 						
 						//Send response text
-						responders.dmPreferreds[i] ? CleanRespond(msg, autoResponseText) : msg.reply(autoResponseText)
+						responders.dmPreferreds[i] ? CleanRespond(msg, autoResponseText) : msg.channel.send(`<@msg.author.id> ${autoResponseText}`)
 
 						//Only use the first match
 						break
