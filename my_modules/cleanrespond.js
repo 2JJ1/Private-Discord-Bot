@@ -1,5 +1,6 @@
 //Try to respond by DM, otherwise send to text channel
 module.exports = function CleanRespond(msgObj, text){
-	msgObj.author.send(text)
-	.catch(()=> msgObj.channel.send(`<@msg.author.id> ${text}`))
+	var user = msg.author || msg.user
+	user.send(text)
+	.catch(()=> msgObj.channel.send(`<@${user.id}> ${text}`))
 }
