@@ -3,7 +3,7 @@ const permissions = require('../../wrappers/permissions')
 const settings = require("../../settings")
 
 module.exports = {
-    enabled: settings.adminCommands.addmod === true,
+    enabled: settings.adminCommands.addMod === true,
     data: new SlashCommandBuilder()
 		.setName("addmod")
 		.setDescription('Gives the selected member moderator permissions.')

@@ -26,7 +26,7 @@ module.exports = {
                 > Account type: ${user.bot ? "Bot" : "User"}
                 > Tag: ${user.tag}
                 > ID: ${user.id}
-                > Account created at: ${moment.utc(user.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss') + ' (UTC)'}`},
+                > Account created on: ${moment.utc(user.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss') + ' (UTC)'}`},
             ],
         }
 
@@ -37,7 +37,7 @@ module.exports = {
             > Display Name: ${member.displayName}
             > Status: ${member.presence ? member.presence.status : "Unknown"}
             > Roles: ${member.roles.cache.map(r => r.name).filter(n => n != '@everyone').join(', ') || 'None'}
-            > Guild joined at: ${moment.utc(member.joinedAt).format('dddd, MMMM Do YYYY, HH:mm:ss') + ' (UTC)'}`})
+            > Guild joined on: ${moment.utc(member.joinedAt).format('dddd, MMMM Do YYYY, HH:mm:ss') + ' (UTC)'}`})
         }
         
         interaction.reply({embeds: [embed]})
