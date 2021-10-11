@@ -36,7 +36,6 @@ module.exports = {
                     > Members #: ${(await msg.guild.members.fetch()).size}
                     > Roles #: ${msg.guild.roles.cache.size}
                     > Created: ${moment.utc(msg.guild.createdAt).format("dddd, MMMM Do YYYY, HH:mm:ss") + ' (UTC)'}
-                    > Region: ${msg.guild.region}
                     > Bans: ${totalBans}
                     > Mutes: ${totalMutes}` +
                     (rateLimitKicksPerDay > 0 ? `\n> Rate Limited kicks/bans: ${recentKicks.length}/${rateLimitKicksPerDay}` : "")
