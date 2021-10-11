@@ -22,7 +22,7 @@ module.exports = {
 
         var totalMutes = (await msg.guild.members.fetch()).filter(member => member.roles.cache.filter(role => role.name.toLowerCase() === "muted").size > 0).size
 
-        msg.reply({embed: {
+        msg.reply({embeds: [{
             title: `${msg.guild.name}'s Guild Information`,
             thumbnail: {
                 url: msg.guild.iconURL()
@@ -31,8 +31,8 @@ module.exports = {
                 {name: "Guild Information", 
                 value: stripIndents`
                     > ID: ${msg.guild.id}
-                    > Owner: ${(await msg.guild.members.fetch(msg.guild.ownerID)).user.tag}
-                    > Owner ID: ${msg.guild.ownerID}
+                    > Owner: ${(await msg.guild.members.fetch(msg.guild.ownerId)).user.tag}
+                    > Owner ID: ${msg.guild.ownerId}
                     > Members #: ${(await msg.guild.members.fetch()).size}
                     > Roles #: ${msg.guild.roles.cache.size}
                     > Created: ${moment.utc(msg.guild.createdAt).format("dddd, MMMM Do YYYY, HH:mm:ss") + ' (UTC)'}
@@ -42,6 +42,6 @@ module.exports = {
                     (rateLimitKicksPerDay > 0 ? `\n> Rate Limited kicks/bans: ${recentKicks.length}/${rateLimitKicksPerDay}` : "")
                 },
             ],
-        }})
+        }]})
     },
 }
