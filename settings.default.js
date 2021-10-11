@@ -125,6 +125,8 @@ module.exports = {
         //true - Allows the "removemoderator" command to be used
         clearWarns: false,
         //true - Allows the "addmod" command to be used
-        addMod: true,
+        addMod: false,
+        //true - Allows the "removemod" command to be used
+        removeMod: false,
     }
 }
