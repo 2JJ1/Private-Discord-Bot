@@ -67,6 +67,10 @@ module.exports = {
                 },
             })
             .then(res => res.json())
+            .catch(e => {
+                interaction.editReply("The 3rd party VM has failed to respond...")
+                throw e
+            })
 
             let description = (compiled.program_message || compiled.compiler_message)
             if(!description) description = "No output..."
