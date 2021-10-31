@@ -115,6 +115,6 @@ module.exports = async function(opts){
     }
     fs.writeFileSync(path.resolve(__dirname, "../flatdbs/mutes.json"), JSON.stringify(mutes))
 
-    target.send(`You were muted in "${guild.name}" by ${requester.tag}${hours?` for ${hours} hour${hours>1?"s":""}`:''}${days?` for ${days} day${days>1?"s":""}`:''}.${reason?` Reason: ${reason}.`:''}`)
+    target.send(`You were muted in "${guild.name}"${hours?` for ${hours} hour${hours>1?"s":""}`:''}${days?` for ${days} day${days>1?"s":""}`:''}.${reason?` Reason: ${reason}.`:''}`)
     .catch(()=>{})
 }
